@@ -31,9 +31,13 @@ jobs:
 
       - name: Install & Build Project
         run: |
+          # 複製根目錄的 vite.config.js 到專案資料夾內
+          cp vite.config.js vitejs-vite-a2sxsv4u/
           cd vitejs-vite-a2sxsv4u
           npm install
           npm run build
+          # 將建置完成的 dist 資料夾移到根目錄
+          cp -r dist ../dist
 
       - name: Setup Pages
         uses: actions/configure-pages@v4
@@ -41,7 +45,7 @@ jobs:
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: './vitejs-vite-a2sxsv4u/dist'
+          path: './dist'
 
       - name: Deploy to GitHub Pages
         id: deployment
