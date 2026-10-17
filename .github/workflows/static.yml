@@ -1,4 +1,4 @@
-name: Deploy Vite site to Pages
+name: Deploy Static HTML to Pages
 
 on:
   push:
@@ -24,25 +24,19 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Set up Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: 20
-
-      - name: Install & Build Project
-        run: |
-          cd vitejs-vite-a2sxsv4u
-          npm install
-          npm run build
-          cp -r dist ../dist
-
       - name: Setup Pages
         uses: actions/configure-pages@v4
+
+      - name: Copy index.html from subfolder if exists
+        run: |
+          if [ -f "./vitejs-vite-a2sxsv4u/index.html" ]; then
+            cp ./vitejs-vite-a2sxsv4u/index.html ./index.html
+          fi
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: './dist'
+          path: '.'
 
       - name: Deploy to GitHub Pages
         id: deployment
