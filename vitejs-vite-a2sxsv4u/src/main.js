@@ -1,6 +1,6 @@
 import './style.css';
 
-// 1. 104 職缺網址設定欄位 (預留可替換之欄位)
+// 1. 104 職缺網址設定欄位
 const VACANCY_CONFIG = {
   INNOVATOR: [
     { name: "遊戲企劃 / 遊戲設計師", url: "https://www.104.com.tw/job/7xxxx" },
@@ -22,8 +22,8 @@ const VACANCY_CONFIG = {
 
 // ⏱️ 核心時間設定 (單位：秒)
 const TIME_SETTINGS = {
-  QUESTION_TIME: 8, // 每題建議思考時間 8 秒
-  INTERMISSION_TIME: 8 // 題目與題目之間的過場等待時間 8 秒
+  QUESTION_TIME: 8,
+  INTERMISSION_TIME: 8
 };
 
 // 2. 5 道職涯情境問答題庫
@@ -80,7 +80,7 @@ const QUESTIONS = [
   }
 ];
 
-// 3. 角色資料（「在遊戲橘子，」與下一句完全連在一起不換行）
+// 3. 角色資料（「在遊戲橘子，」自然接續）
 const ROLES = {
   INNOVATOR: {
     title: "創意發想型",
@@ -108,25 +108,28 @@ const ROLES = {
   }
 };
 
-// 狀態變數
-let currentStep = 'HOME'; // 'HOME', 'GAME', 'INTERMISSION', 'RESULT'
+let currentStep = 'HOME';
 let currentQuestionIndex = 0;
 let selectedAnswers = Array(QUESTIONS.length).fill(null);
 let timer = null;
 let qTimeLeft = TIME_SETTINGS.QUESTION_TIME;
 let iTimeLeft = TIME_SETTINGS.INTERMISSION_TIME;
 
-const app = document.getElementById('app');
-
-function render() {
-  if (currentStep === 'HOME') renderHome();
-  else if (currentStep === 'GAME') renderGame();
-  else if (currentStep === 'INTERMISSION') renderIntermission();
-  else if (currentStep === 'RESULT') renderResult();
+function getAppElement() {
+  return document.getElementById('app');
 }
 
-// 畫面一：首頁
-function renderHome() {
+function render() {
+  const app = getAppElement();
+  if (!app) return;
+
+  if (currentStep === 'HOME') renderHome(app);
+  else if (currentStep === 'GAME') renderGame(app);
+  else if (currentStep === 'INTERMISSION') renderIntermission(app);
+  else if (currentStep === 'RESULT') renderResult(app);
+}
+
+function renderHome(app) {
   app.innerHTML = `
     <div class="text-center space-y-6">
       <div class="inline-block bg-[#FF6600]/10 border border-[#FF6600] text-[#FF6600] px-3 py-1 rounded-full text-xs font-mono">
@@ -154,11 +157,10 @@ function renderHome() {
       </button>
     </div>
   `;
-  document.getElementById('start-btn').addEventListener('click', startGame);
+  document.getElementById('start-btn')?.addEventListener('click', startGame);
 }
 
-// 畫面二：答題畫面（按下確定送出按鈕才跳過）
-function renderGame() {
+function renderGame(app) {
   const q = QUESTIONS[currentQuestionIndex];
   const selected = selectedAnswers[currentQuestionIndex];
 
@@ -196,15 +198,14 @@ function renderGame() {
     btn.addEventListener('click', (e) => {
       const idx = parseInt(e.currentTarget.getAttribute('data-index'));
       selectedAnswers[currentQuestionIndex] = idx;
-      renderGame();
+      renderGame(app);
     });
   });
 
-  document.getElementById('submit-btn').addEventListener('click', submitAnswer);
+  document.getElementById('submit-btn')?.addEventListener('click', submitAnswer);
 }
 
-// 畫面三：題目過場畫面
-function renderIntermission() {
+function renderIntermission(app) {
   const selectedIdx = selectedAnswers[currentQuestionIndex];
   const q = QUESTIONS[currentQuestionIndex];
   const chosenOpt = q.options[selectedIdx];
@@ -237,15 +238,13 @@ function renderIntermission() {
   `;
 }
 
-// 畫面四：結果頁（更新徵才感謝文案，與句尾文字連接）
-function renderResult() {
+function renderResult(app) {
   const { bestRoleKey } = calculateResultRole();
   const role = ROLES[bestRoleKey];
   const vacancies = VACANCY_CONFIG[bestRoleKey] || [];
 
   app.innerHTML = `
     <div class="space-y-6">
-      <!-- 角色卡片 -->
       <div class="bg-[#1A1A1A] border border-[#FF6600]/50 p-6 rounded-2xl text-center space-y-4">
         <div class="text-xs font-mono text-[#FF6600] tracking-widest">YOUR CAREER ARCHETYPE</div>
         <h2 class="text-2xl font-black text-white">${role.title}</h2>
@@ -260,7 +259,6 @@ function renderResult() {
         </div>
       </div>
 
-      <!-- 104 職缺推薦區塊 -->
       <div class="bg-[#1A1A1A] border border-[#333333] p-4 rounded-xl space-y-3">
         <div class="text-xs font-bold text-white flex justify-between items-center">
           <span>🚀 推薦延伸職缺領域</span>
@@ -279,7 +277,6 @@ function renderResult() {
         </div>
       </div>
 
-      <!-- 🎁 校園徵才感謝與好禮兌換提示卡片 -->
       <div class="bg-gradient-to-r from-[#FF6600]/20 to-[#1A1A1A] border border-[#FF6600] p-4 rounded-xl text-center space-y-1">
         <div class="text-sm font-extrabold text-[#FF6600]">感謝參與橘子集團 2027 台灣大學校園徵才！</div>
         <p class="text-xs text-gray-200 font-bold">🎁 請出示此畫面給現場工作人員，即可兌換專屬精美好禮！</p>
@@ -375,36 +372,9 @@ function calculateResultRole() {
   return { bestRoleKey, scores };
 }
 
-function initQRCodeModal() {
-  const modal = document.getElementById('qr-modal');
-  const openBtn = document.getElementById('qr-modal-btn');
-  const closeBtn = document.getElementById('close-qr-btn');
-  const qrContainer = document.getElementById('qrcode-container');
-  const currentUrlText = document.getElementById('current-url-text');
-
-  if (!openBtn) return;
-
-  openBtn.addEventListener('click', () => {
-    qrContainer.innerHTML = '';
-    const currentUrl = window.location.href;
-    currentUrlText.textContent = currentUrl;
-
-    if (window.QRCode) {
-      new window.QRCode(qrContainer, {
-        text: currentUrl,
-        width: 180,
-        height: 180,
-        colorDark: "#121212",
-        colorLight: "#ffffff"
-      });
-    }
-    modal.classList.remove('hidden');
-  });
-
-  closeBtn.addEventListener('click', () => {
-    modal.classList.add('hidden');
-  });
+// 確保 DOM 載入後執行
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', render);
+} else {
+  render();
 }
-
-render();
-initQRCodeModal();
