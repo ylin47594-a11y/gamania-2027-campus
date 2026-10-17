@@ -1,0 +1,410 @@
+import './style.css';
+
+// 1. 104 職缺網址設定欄位 (預留可替換之欄位)
+const VACANCY_CONFIG = {
+  INNOVATOR: [
+    { name: "遊戲企劃 / 遊戲設計師", url: "https://www.104.com.tw/job/7xxxx" },
+    { name: "品牌營銷企劃專員", url: "https://www.104.com.tw/job/7xxxx" }
+  ],
+  ANALYST: [
+    { name: "全端開發工程師 (Full-Stack)", url: "https://www.104.com.tw/job/7xxxx" },
+    { name: "數據分析與維運工程師", url: "https://www.104.com.tw/job/7xxxx" }
+  ],
+  CONNECTOR: [
+    { name: "跨國專案管理師 (PM)", url: "https://www.104.com.tw/job/7xxxx" },
+    { name: "社群營運與資源整合專員", url: "https://www.104.com.tw/job/7xxxx" }
+  ],
+  EXPLORER: [
+    { name: "使用者體驗 UX 研究員", url: "https://www.104.com.tw/job/7xxxx" },
+    { name: "創新產品市場分析師", url: "https://www.104.com.tw/job/7xxxx" }
+  ]
+};
+
+// ⏱️ 核心時間設定 (單位：秒)
+const TIME_SETTINGS = {
+  QUESTION_TIME: 8, // 每題建議思考時間 8 秒
+  INTERMISSION_TIME: 8 // 題目與題目之間的過場等待時間 8 秒
+};
+
+// 2. 5 道職涯情境問答題庫
+const QUESTIONS = [
+  {
+    id: 1,
+    title: "專案啟動時，你最想扮演什麼角色？",
+    options: [
+      { text: "提出顛覆性的創新概念與酷炫玩法", type: "INNOVATOR" },
+      { text: "規劃技術架構與數據分析流程", type: "ANALYST" },
+      { text: "跨團隊溝通協調，確保時程順利推進", type: "CONNECTOR" },
+      { text: "觀察玩家與市場潛在需求，找出新痛點", type: "EXPLORER" }
+    ]
+  },
+  {
+    id: 2,
+    title: "當遇到突發的系統 Bug 或專案瓶頸，你會？",
+    options: [
+      { text: "腦力激盪，試圖用非傳統的妙招繞過限制", type: "INNOVATOR" },
+      { text: "冷靜分析 Error Log，逐步除錯與定位問題", type: "ANALYST" },
+      { text: "快速召集相關成員，整合資源共同決策", type: "CONNECTOR" },
+      { text: "深入了解使用者的真實反饋，確認修復方向", type: "EXPLORER" }
+    ]
+  },
+  {
+    id: 3,
+    title: "在團隊合作中，身邊的人最常稱讚你的是？",
+    options: [
+      { text: "點子王！總是有源源不絕的靈感", type: "INNOVATOR" },
+      { text: "邏輯大師！邏輯嚴密且說服力強", type: "ANALYST" },
+      { text: "神級隊友！有你在進度就很令人安心", type: "CONNECTOR" },
+      { text: "敏銳雷達！總能察覺別人忽視的細節", type: "EXPLORER" }
+    ]
+  },
+  {
+    id: 4,
+    title: "面對充滿不確定性的新任務時，你的第一步是？",
+    options: [
+      { text: "邊做邊嘗試，在實作中驗證各種有趣想法", type: "INNOVATOR" },
+      { text: "蒐集市場數據與文獻，做嚴謹的評估報告", type: "ANALYST" },
+      { text: "拜訪相關領域的專家或夥伴，建立合作機制", type: "CONNECTOR" },
+      { text: "觀察競品優缺點，發掘尚未被滿足的缺口", type: "EXPLORER" }
+    ]
+  },
+  {
+    id: 5,
+    title: "理想中的工作成就感來自於？",
+    options: [
+      { text: "打造出令人驚豔、前所未見的創新產品", type: "INNOVATOR" },
+      { text: "破解高難度複雜問題，優化系統效率", type: "ANALYST" },
+      { text: "帶領團隊突破重圍，順利達成共同目標", type: "CONNECTOR" },
+      { text: "洞察市場趨勢，引領全新的商業方向", type: "EXPLORER" }
+    ]
+  }
+];
+
+// 3. 角色資料（「在遊戲橘子，」與下一句完全連在一起不換行）
+const ROLES = {
+  INNOVATOR: {
+    title: "創意發想型",
+    subtitle: "The Creative Trailblazer",
+    desc: "你擁有強大的想像力與突破框架的勇氣！在遊戲橘子，你總是能為產品注入驚喜與新鮮感。",
+    traits: ["點子源源不絕", "熱愛探索可能性", "勇於挑戰現狀"]
+  },
+  ANALYST: {
+    title: "邏輯解題型",
+    subtitle: "The Master Mind",
+    desc: "你具備卓越的條理性與數據敏感度！在遊戲橘子，你能精準找到關鍵解法。",
+    traits: ["數據導向分析", "結構化思考", "講求高效率與嚴密邏輯"]
+  },
+  CONNECTOR: {
+    title: "連結推進型",
+    subtitle: "The Project Catalyst",
+    desc: "你是團隊中不可或缺的黏著劑與推手！在遊戲橘子，你能將多元資源轉化為執行力。",
+    traits: ["擅長跨部門溝通", "資源整合專家", "目標與時程導向"]
+  },
+  EXPLORER: {
+    title: "洞察探索型",
+    subtitle: "The Strategic Visionary",
+    desc: "你對周遭變化有著敏銳的感知力！在遊戲橘子，你協助團隊在市場中取得先機。",
+    traits: ["敏銳市場觀察力", "重視使用者體驗", "發掘隱形需求"]
+  }
+};
+
+// 狀態變數
+let currentStep = 'HOME'; // 'HOME', 'GAME', 'INTERMISSION', 'RESULT'
+let currentQuestionIndex = 0;
+let selectedAnswers = Array(QUESTIONS.length).fill(null);
+let timer = null;
+let qTimeLeft = TIME_SETTINGS.QUESTION_TIME;
+let iTimeLeft = TIME_SETTINGS.INTERMISSION_TIME;
+
+const app = document.getElementById('app');
+
+function render() {
+  if (currentStep === 'HOME') renderHome();
+  else if (currentStep === 'GAME') renderGame();
+  else if (currentStep === 'INTERMISSION') renderIntermission();
+  else if (currentStep === 'RESULT') renderResult();
+}
+
+// 畫面一：首頁
+function renderHome() {
+  app.innerHTML = `
+    <div class="text-center space-y-6">
+      <div class="inline-block bg-[#FF6600]/10 border border-[#FF6600] text-[#FF6600] px-3 py-1 rounded-full text-xs font-mono">
+        2027 台灣大學校園徵才
+      </div>
+      
+      <h1 class="text-3xl font-extrabold tracking-tight text-[#FF6600]">
+        橘勢待發，職場勝局
+      </h1>
+      
+      <p class="text-gray-400 text-sm leading-relaxed">
+        透過 5 道職涯情境問答，<br />
+        探索你在遊戲橘子集團的獨特職涯天賦與戰力定位！
+      </p>
+      
+      <div class="bg-[#1A1A1A] border border-[#333333] p-4 rounded-xl text-left space-y-2 text-xs text-gray-300">
+        <div class="font-bold text-white mb-1">💡 遊戲說明：</div>
+        <p>1. 免登入、不搜集任何個人資料。</p>
+        <p>2. 每題點選選項後，需按下「確定送出答案」始可進行下一題。</p>
+        <p>3. 每題送出後有 ${TIME_SETTINGS.INTERMISSION_TIME} 秒過場分析時間。</p>
+      </div>
+
+      <button id="start-btn" class="keyboard-btn w-full py-4 bg-[#FF6600] text-black font-extrabold text-lg rounded-xl border border-[#FF6600]">
+        開始職涯探索 →
+      </button>
+    </div>
+  `;
+  document.getElementById('start-btn').addEventListener('click', startGame);
+}
+
+// 畫面二：答題畫面（按下確定送出按鈕才跳過）
+function renderGame() {
+  const q = QUESTIONS[currentQuestionIndex];
+  const selected = selectedAnswers[currentQuestionIndex];
+
+  app.innerHTML = `
+    <div class="space-y-6">
+      <div class="flex justify-between items-center text-xs">
+        <span class="font-mono text-gray-400">QUESTION ${currentQuestionIndex + 1} / ${QUESTIONS.length}</span>
+        <span id="q-timer-display" class="font-mono font-bold ${qTimeLeft <= 3 ? 'text-red-500 animate-pulse' : 'text-[#FF6600]'}">
+          倒數 ${qTimeLeft} 秒
+        </span>
+      </div>
+      
+      <h2 class="text-lg font-bold text-white leading-snug">${q.title}</h2>
+
+      <div class="space-y-3">
+        ${q.options.map((opt, idx) => `
+          <button 
+            data-index="${idx}" 
+            class="opt-btn keyboard-btn w-full text-left p-4 rounded-xl border border-[#333333] bg-[#1A1A1A] text-sm text-gray-200 flex items-start space-x-3 ${selected === idx ? 'selected' : ''}">
+            <span class="font-mono font-bold border border-current px-2 py-0.5 rounded text-xs">${String.fromCharCode(65 + idx)}</span>
+            <span class="flex-1">${opt.text}</span>
+          </button>
+        `).join('')}
+      </div>
+
+      <div id="error-msg" class="text-red-500 text-xs text-center h-4 font-bold"></div>
+
+      <button id="submit-btn" class="keyboard-btn w-full py-3 bg-[#FF6600] text-black font-extrabold text-base rounded-xl border border-[#FF6600]">
+        確定送出答案 →
+      </button>
+    </div>
+  `;
+
+  document.querySelectorAll('.opt-btn').forEach(btn => {
+    btn.addEventListener('click', (e) => {
+      const idx = parseInt(e.currentTarget.getAttribute('data-index'));
+      selectedAnswers[currentQuestionIndex] = idx;
+      renderGame();
+    });
+  });
+
+  document.getElementById('submit-btn').addEventListener('click', submitAnswer);
+}
+
+// 畫面三：題目過場畫面
+function renderIntermission() {
+  const selectedIdx = selectedAnswers[currentQuestionIndex];
+  const q = QUESTIONS[currentQuestionIndex];
+  const chosenOpt = q.options[selectedIdx];
+  const isLastQuestion = currentQuestionIndex === QUESTIONS.length - 1;
+
+  app.innerHTML = `
+    <div class="text-center space-y-6 py-4">
+      <div class="inline-block bg-[#FF6600]/20 border border-[#FF6600] text-[#FF6600] px-3.5 py-1 rounded-full text-xs font-mono font-bold">
+        ${isLastQuestion ? '⚡ 正在計算終極職涯角色...' : `⚡ 戰力數據分析中... (第 ${currentQuestionIndex + 1}/5 題完畢)`}
+      </div>
+
+      <div class="relative w-28 h-28 mx-auto flex items-center justify-center">
+        <div class="absolute inset-0 rounded-full border-4 border-[#333333]"></div>
+        <div class="absolute inset-0 rounded-full border-4 border-[#FF6600] border-t-transparent animate-spin"></div>
+        <div class="text-center">
+          <span id="intermission-timer" class="text-3xl font-black font-mono text-white">${iTimeLeft}</span>
+          <span class="block text-[10px] text-gray-400 font-mono">SEC</span>
+        </div>
+      </div>
+
+      <div class="bg-[#1A1A1A] border border-[#333333] p-4 rounded-xl text-left space-y-2">
+        <div class="text-xs font-mono text-[#FF6600]">YOUR SUBMITTED OPTION:</div>
+        <div class="text-sm font-bold text-white">${chosenOpt ? chosenOpt.text : '已紀錄選擇'}</div>
+      </div>
+
+      <p class="text-xs text-gray-400">
+        ${isLastQuestion ? '即將為您揭曉 2027 職涯探索結果！' : '請稍候，時間倒數結束後將自動進入下一題...'}
+      </p>
+    </div>
+  `;
+}
+
+// 畫面四：結果頁（更新徵才感謝文案，與句尾文字連接）
+function renderResult() {
+  const { bestRoleKey } = calculateResultRole();
+  const role = ROLES[bestRoleKey];
+  const vacancies = VACANCY_CONFIG[bestRoleKey] || [];
+
+  app.innerHTML = `
+    <div class="space-y-6">
+      <!-- 角色卡片 -->
+      <div class="bg-[#1A1A1A] border border-[#FF6600]/50 p-6 rounded-2xl text-center space-y-4">
+        <div class="text-xs font-mono text-[#FF6600] tracking-widest">YOUR CAREER ARCHETYPE</div>
+        <h2 class="text-2xl font-black text-white">${role.title}</h2>
+        <div class="text-xs text-gray-400 font-mono">${role.subtitle}</div>
+        <p class="text-xs text-gray-300 leading-relaxed text-left">${role.desc}</p>
+        
+        <div class="text-left pt-2 border-t border-[#333333]">
+          <div class="text-xs font-bold text-[#FF6600] mb-2">✦ 核心職涯特質：</div>
+          <div class="flex flex-wrap gap-2">
+            ${role.traits.map(t => `<span class="bg-[#121212] border border-[#333333] text-gray-300 text-xs px-2.5 py-1 rounded-md">${t}</span>`).join('')}
+          </div>
+        </div>
+      </div>
+
+      <!-- 104 職缺推薦區塊 -->
+      <div class="bg-[#1A1A1A] border border-[#333333] p-4 rounded-xl space-y-3">
+        <div class="text-xs font-bold text-white flex justify-between items-center">
+          <span>🚀 推薦延伸職缺領域</span>
+          <span class="text-[#FF6600] text-xs font-mono">104 官方職缺</span>
+        </div>
+        <div class="space-y-2">
+          ${vacancies.map(v => `
+            <div class="flex justify-between items-center p-2.5 bg-[#121212] rounded-lg border border-[#333333] text-xs">
+              <span class="text-gray-200">${v.name}</span>
+              <a href="${v.url}" target="_blank" class="text-[#FF6600] font-bold hover:underline flex items-center space-x-1">
+                <span>查看職缺</span>
+                <span>↗</span>
+              </a>
+            </div>
+          `).join('')}
+        </div>
+      </div>
+
+      <!-- 🎁 校園徵才感謝與好禮兌換提示卡片 -->
+      <div class="bg-gradient-to-r from-[#FF6600]/20 to-[#1A1A1A] border border-[#FF6600] p-4 rounded-xl text-center space-y-1">
+        <div class="text-sm font-extrabold text-[#FF6600]">感謝參與橘子集團 2027 台灣大學校園徵才！</div>
+        <p class="text-xs text-gray-200 font-bold">🎁 請出示此畫面給現場工作人員，即可兌換專屬精美好禮！</p>
+      </div>
+    </div>
+  `;
+}
+
+function startGame() {
+  currentStep = 'GAME';
+  currentQuestionIndex = 0;
+  selectedAnswers = Array(QUESTIONS.length).fill(null);
+  render();
+  startQuestionTimer();
+}
+
+function startQuestionTimer() {
+  clearInterval(timer);
+  qTimeLeft = TIME_SETTINGS.QUESTION_TIME;
+  timer = setInterval(() => {
+    qTimeLeft--;
+    if (qTimeLeft <= 0) {
+      const timerEl = document.getElementById('q-timer-display');
+      if (timerEl) {
+        timerEl.textContent = `請儘快選擇答案並點擊送出！`;
+        timerEl.classList.add('text-red-500', 'animate-pulse');
+      }
+    } else {
+      const timerEl = document.getElementById('q-timer-display');
+      if (timerEl) {
+        timerEl.textContent = `倒數 ${qTimeLeft} 秒`;
+      }
+    }
+  }, 1000);
+}
+
+function submitAnswer() {
+  if (selectedAnswers[currentQuestionIndex] === null) {
+    const errorEl = document.getElementById('error-msg');
+    if (errorEl) errorEl.textContent = '請先選擇一個答案！';
+    return;
+  }
+  clearInterval(timer);
+  startIntermissionTimer();
+}
+
+function startIntermissionTimer() {
+  currentStep = 'INTERMISSION';
+  iTimeLeft = TIME_SETTINGS.INTERMISSION_TIME;
+  render();
+
+  clearInterval(timer);
+  timer = setInterval(() => {
+    iTimeLeft--;
+    if (iTimeLeft <= 0) {
+      clearInterval(timer);
+      if (currentQuestionIndex < QUESTIONS.length - 1) {
+        currentQuestionIndex++;
+        currentStep = 'GAME';
+        render();
+        startQuestionTimer();
+      } else {
+        currentStep = 'RESULT';
+        render();
+      }
+    } else {
+      const timerEl = document.getElementById('intermission-timer');
+      if (timerEl) timerEl.textContent = iTimeLeft;
+    }
+  }, 1000);
+}
+
+function calculateResultRole() {
+  const scores = { INNOVATOR: 0, ANALYST: 0, CONNECTOR: 0, EXPLORER: 0 };
+  selectedAnswers.forEach((ansIdx, qIdx) => {
+    if (ansIdx !== null) {
+      const roleType = QUESTIONS[qIdx].options[ansIdx].type;
+      scores[roleType] = (scores[roleType] || 0) + 1;
+    }
+  });
+
+  const priorityOrder = ['INNOVATOR', 'ANALYST', 'CONNECTOR', 'EXPLORER'];
+  let bestRoleKey = priorityOrder[0];
+  let maxScore = -1;
+
+  priorityOrder.forEach(role => {
+    if (scores[role] > maxScore) {
+      maxScore = scores[role];
+      bestRoleKey = role;
+    }
+  });
+
+  return { bestRoleKey, scores };
+}
+
+function initQRCodeModal() {
+  const modal = document.getElementById('qr-modal');
+  const openBtn = document.getElementById('qr-modal-btn');
+  const closeBtn = document.getElementById('close-qr-btn');
+  const qrContainer = document.getElementById('qrcode-container');
+  const currentUrlText = document.getElementById('current-url-text');
+
+  if (!openBtn) return;
+
+  openBtn.addEventListener('click', () => {
+    qrContainer.innerHTML = '';
+    const currentUrl = window.location.href;
+    currentUrlText.textContent = currentUrl;
+
+    if (window.QRCode) {
+      new window.QRCode(qrContainer, {
+        text: currentUrl,
+        width: 180,
+        height: 180,
+        colorDark: "#121212",
+        colorLight: "#ffffff"
+      });
+    }
+    modal.classList.remove('hidden');
+  });
+
+  closeBtn.addEventListener('click', () => {
+    modal.classList.add('hidden');
+  });
+}
+
+render();
+initQRCodeModal();

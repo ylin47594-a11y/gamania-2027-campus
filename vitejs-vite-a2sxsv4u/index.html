@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>橘勢待發，職場勝局 | 遊戲橘子 2027 校園徵才</title>
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Dynamic QR Code Engine -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+</head>
+<body class="bg-[#121212] text-white min-h-screen flex flex-col justify-between items-center p-4 selection:bg-[#FF6600] selection:text-black">
+
+  <!-- Header 頁首：僅保留品牌標示與現場 QR 按鈕 -->
+  <header class="w-full max-w-md flex justify-between items-center py-3 border-b border-[#333333]">
+    <div class="flex items-center space-x-2">
+      <div class="w-3 h-3 rounded-full bg-[#FF6600]"></div>
+      <span class="text-xs font-mono tracking-widest text-gray-400">GAMANIA 2027</span>
+    </div>
+    <!-- 現場工作人員跳出 QR Code 彈窗按鈕 -->
+    <button id="qr-modal-btn" class="text-xs font-mono bg-[#1A1A1A] border border-[#333333] hover:border-[#FF6600] text-gray-300 px-2.5 py-1 rounded transition">
+      📱 現場 QR
+    </button>
+  </header>
+
+  <!-- App 主畫面掛載點 -->
+  <main id="app" class="w-full max-w-md my-auto py-6">
+    <!-- 內容由 main.js 動態渲染 -->
+  </main>
+
+  <!-- Footer 頁尾 -->
+  <footer class="w-full max-w-md text-center py-3 text-xs text-gray-500 border-t border-[#333333]">
+    &copy; 2027 遊戲橘子集團 Gamania Group. All Rights Reserved.
+  </footer>
+
+  <!-- 現場工作人員專用 QR Code 彈窗 Modal -->
+  <div id="qr-modal" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 hidden flex justify-center items-center p-4">
+    <div class="bg-[#1A1A1A] border border-[#FF6600] p-6 rounded-2xl max-w-sm w-full text-center space-y-4">
+      <h3 class="text-lg font-bold text-[#FF6600]">請掃描開啟遊戲</h3>
+      <div id="qrcode-container" class="flex justify-center p-3 bg-white rounded-xl mx-auto w-[200px] h-[200px]"></div>
+      <p class="text-xs text-gray-400 break-all font-mono" id="current-url-text"></p>
+      <button id="close-qr-btn" class="w-full py-2 bg-[#FF6600] text-black font-bold text-sm rounded-lg">
+        關閉視窗
+      </button>
+    </div>
+  </div>
+
+  <script type="module" src="/src/main.js"></script>
+</body>
+</html>
