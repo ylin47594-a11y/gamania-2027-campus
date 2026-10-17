@@ -33,7 +33,7 @@ jobs:
         run: |
           cd vitejs-vite-a2sxsv4u
           npm install
-          npm run build -- --base=/gamania-2027-campus/
+          npm run build
           cp -r dist ../dist
 
       - name: Setup Pages
