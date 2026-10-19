@@ -129,16 +129,15 @@
           let vacancyList = [];
 
           if (topRoles.length > 1) {
-            // 平票判定：跨界雙天賦
+            // 平票/同分：雙天賦跨界型
             const r1 = ROLES[topRoles[0]];
             const r2 = ROLES[topRoles[1]];
             roleHeaderHTML = `
               <div class="badge" style="background:rgba(255,215,0,0.15); border-color:#FFD700; color:#FFD700;">🌟 雙重天賦 / 跨界型人才</div>
               <h2 style="font-size:20px; color:#fff; margin:8px 0;">${r1.title} × ${r2.title}</h2>
               <p style="color:#aaa; font-size:12px; margin-bottom:12px;">${r1.subtitle} & ${r2.subtitle}</p>
-              <p style="color:#ddd; font-size:13px; text-align:left; line-height:1.5;">你在多個領域展現出強大的潛能！兼具 ${r1.title} 與 ${r2.title} 的特色，在橘子集團是非常具有彈性與創新跨界能力的關鍵人才。</p>
+              <p style="color:#ddd; font-size:13px; text-align:left; line-height:1.5;">你在多個面向展現出均勻且強大的潛力！同時具備 ${r1.title} 與 ${r2.title} 的特色，在橘子集團是極具彈性與跨界整合能力的關鍵角色。</p>
             `;
-            // 合併兩者的推薦職缺
             vacancyList = [...(VACANCIES[topRoles[0]] || []), ...(VACANCIES[topRoles[1]] || [])];
           } else {
             // 單一最高分角色
@@ -198,18 +197,24 @@
         }, 1000);
       }
 
-      // 計算同分/最高分的平票處理邏輯
+      // 精準計算平票（同為最高分）
       function getResult() {
-        const counts = { INNOVATOR:0, ANALYST:0, CONNECTOR:0, EXPLORER:0 };
-        answers.forEach((ans, i) => { if (ans !== null) counts[QUESTIONS[i].options[ans].type]++; });
+        const counts = { INNOVATOR: 0, ANALYST: 0, CONNECTOR: 0, EXPLORER: 0 };
         
-        let maxCount = 0;
-        Object.keys(counts).forEach(key => {
-          if (counts[key] > maxCount) maxCount = counts[key];
+        answers.forEach((ansIndex, qIndex) => {
+          if (ansIndex !== null && QUESTIONS[qIndex] && QUESTIONS[qIndex].options[ansIndex]) {
+            const type = QUESTIONS[qIndex].options[ansIndex].type;
+            if (counts[type] !== undefined) counts[type]++;
+          }
         });
 
-        // 找出所有達到最高分的角色（若多於一個即為平票）
-        const topRoles = Object.keys(counts).filter(key => counts[key] === maxCount);
+        let maxVal = 0;
+        Object.values(counts).forEach(v => {
+          if (v > maxVal) maxVal = v;
+        });
+
+        // 找出所有達到最高分的屬性
+        const topRoles = Object.keys(counts).filter(key => counts[key] === maxVal);
         return topRoles;
       }
 
