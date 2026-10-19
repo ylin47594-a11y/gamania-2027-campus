@@ -124,12 +124,11 @@
             </div>`;
         } else if (currentStep === 'RESULT') {
           const topRoles = getResult();
-          
           let roleHeaderHTML = '';
           let vacancyList = [];
 
           if (topRoles.length > 1) {
-            // 平票/同分：雙天賦跨界型
+            // 平票判定：跨界雙天賦
             const r1 = ROLES[topRoles[0]];
             const r2 = ROLES[topRoles[1]];
             roleHeaderHTML = `
@@ -140,7 +139,7 @@
             `;
             vacancyList = [...(VACANCIES[topRoles[0]] || []), ...(VACANCIES[topRoles[1]] || [])];
           } else {
-            // 單一最高分角色
+            // 單一最高分
             const role = ROLES[topRoles[0]];
             roleHeaderHTML = `
               <div style="color:#FF6600; font-size:12px; font-weight:bold;">YOUR CAREER ARCHETYPE</div>
@@ -197,37 +196,42 @@
         }, 1000);
       }
 
-      // 精準計算平票（同為最高分）
+      // 零失敗平票判定法：找出最高票數的所有類別
       function getResult() {
         const counts = { INNOVATOR: 0, ANALYST: 0, CONNECTOR: 0, EXPLORER: 0 };
         
         answers.forEach((ansIndex, qIndex) => {
           if (ansIndex !== null && QUESTIONS[qIndex] && QUESTIONS[qIndex].options[ansIndex]) {
             const type = QUESTIONS[qIndex].options[ansIndex].type;
-            if (counts[type] !== undefined) counts[type]++;
+            counts[type] = (counts[type] || 0) + 1;
           }
         });
 
-        let maxVal = 0;
-        Object.values(counts).forEach(v => {
-          if (v > maxVal) maxVal = v;
-        });
+        // 找出最高得票數是多少
+        let maxCount = -1;
+        for (const type in counts) {
+          if (counts[type] > maxCount) {
+            maxCount = counts[type];
+          }
+        }
 
-        // 找出所有達到最高分的屬性
-        const topRoles = Object.keys(counts).filter(key => counts[key] === maxVal);
-        return topRoles;
+        // 把所有獲得最高得票數的角色都抓出來（若多於一個，就代表平票！）
+        const winners = [];
+        for (const type in counts) {
+          if (counts[type] === maxCount) {
+            winners.push(type);
+          }
+        }
+
+        return winners;
       }
 
       function initApp() {
         render();
         const showQrBtn = document.getElementById('show-qr-btn');
         const closeQrBtn = document.getElementById('close-qr-btn');
-        if (showQrBtn) {
-          showQrBtn.onclick = () => document.getElementById('qr-modal').classList.remove('hidden');
-        }
-        if (closeQrBtn) {
-          closeQrBtn.onclick = () => document.getElementById('qr-modal').classList.add('hidden');
-        }
+        if (showQrBtn) showQrBtn.onclick = () => document.getElementById('qr-modal').classList.remove('hidden');
+        if (closeQrBtn) closeQrBtn.onclick = () => document.getElementById('qr-modal').classList.add('hidden');
       }
 
       window.addEventListener('DOMContentLoaded', initApp);
