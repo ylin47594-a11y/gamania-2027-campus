@@ -12,7 +12,7 @@
       .dot { width: 12px; height: 12px; border-radius: 50%; background-color: #FF6600; }
       .qr-btn { background: #1A1A1A; border: 1px solid #333333; color: #ccc; padding: 6px 12px; border-radius: 8px; font-size: 12px; cursor: pointer; }
       .qr-btn:hover { border-color: #FF6600; }
-      main { width: 100%; max-width: 440px; margin: auto; padding: 20px 0; }
+      main { width: 100%; max-width: 440px; margin: auto; padding: 20px 0; flex: 1; }
       footer { width: 100%; max-width: 440px; margin: 0 auto; text-align: center; font-size: 11px; color: #666; padding: 12px 0; border-top: 1px solid #333333; }
       .card { background: #1A1A1A; border: 1px solid #333; border-radius: 16px; padding: 20px; text-align: left; margin-bottom: 16px; }
       .title { color: #FF6600; font-size: 24px; font-weight: 800; text-align: center; margin: 12px 0; }
@@ -80,6 +80,8 @@
 
       function render() {
         const app = document.getElementById('app');
+        if (!app) return;
+
         if (currentStep === 'HOME') {
           app.innerHTML = `
             <div style="text-align:center;">
@@ -179,15 +181,20 @@
         return Object.keys(counts).reduce((a, b) => counts[a] >= counts[b] ? a : b);
       }
 
-      document.getElementById('show-qr-btn').onclick = () => {
-        document.getElementById('qr-modal').classList.remove('hidden');
-      };
+      function initApp() {
+        render();
+        const showQrBtn = document.getElementById('show-qr-btn');
+        const closeQrBtn = document.getElementById('close-qr-btn');
+        if (showQrBtn) {
+          showQrBtn.onclick = () => document.getElementById('qr-modal').classList.remove('hidden');
+        }
+        if (closeQrBtn) {
+          closeQrBtn.onclick = () => document.getElementById('qr-modal').classList.add('hidden');
+        }
+      }
 
-      document.getElementById('close-qr-btn').onclick = () => {
-        document.getElementById('qr-modal').classList.add('hidden');
-      };
-
-      render();
+      window.addEventListener('DOMContentLoaded', initApp);
+      window.addEventListener('load', initApp);
     </script>
   </body>
 </html>
