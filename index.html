@@ -70,10 +70,10 @@
       ];
 
       const ROLES = {
-        INNOVATOR: { title: "創意發想型", subtitle: "The Creative Trailblazer", desc: "你擁有強大的想像力與突破框架的勇氣！在橘子集團，你總是能為產品注入驚喜與新鮮感。", traits: ["點子源源不絕", "熱愛探索可能性", "勇於挑戰現狀"] },
-        ANALYST: { title: "邏輯解題型", subtitle: "The Master Mind", desc: "你具備卓越的條理性與數據敏感度！在橘子集團，你能精準找到關鍵解法。", traits: ["數據導向分析", "結構化思考", "講求高效率與嚴密邏輯"] },
-        CONNECTOR: { title: "連結推進型", subtitle: "The Project Catalyst", desc: "你是團隊中不可或缺的黏著劑與推手！在橘子集團，你能將多元資源轉化為執行力。", traits: ["擅長跨部門溝通", "資源整合專家", "目標與時程導向"] },
-        EXPLORER: { title: "洞察探索型", subtitle: "The Strategic Visionary", desc: "你對周遭變化有著敏銳的感知力！在橘子集團，你協助團隊在市場中取得先機。", traits: ["敏銳市場觀察力", "重視使用者體驗", "發掘隱形需求"] }
+        INNOVATOR: { title: "創意發想型", subtitle: "The Creative Trailblazer", desc: "你擁有強大的想像力與突破框架的勇氣！在橘子集團，你總是能為產品注入驚喜與新鮮感。" },
+        ANALYST: { title: "邏輯解題型", subtitle: "The Master Mind", desc: "你具備卓越的條理性與數據敏感度！在橘子集團，你能精準找到關鍵解法。" },
+        CONNECTOR: { title: "連結推進型", subtitle: "The Project Catalyst", desc: "你是團隊中不可或缺的黏著劑與推手！在橘子集團，你能將多元資源轉化為執行力。" },
+        EXPLORER: { title: "洞察探索型", subtitle: "The Strategic Visionary", desc: "你對周遭變化有著敏銳的感知力！在橘子集團，你協助團隊在市場中取得先機。" }
       };
 
       let currentStep = 'HOME', qIdx = 0, answers = [null, null, null, null, null], timer = null, qTime = 8, iTime = 8;
@@ -89,7 +89,7 @@
               <h1 class="title">橘勢待發，職場勝局</h1>
               <p style="color:#aaa; font-size:14px; line-height:1.6; margin-bottom:16px;">透過 5 道職涯情境問答，探索你在橘子集團的獨特職涯天賦！</p>
               <div class="card" style="font-size:12px; color:#ccc;">
-                <b style="color:#fff;">💡 遊戲說明：</b><br/>1. 免登入、不搜集個人資料。<br/>2. 選取後按下「確定送出答案」。<br/>3. 每題過場有 8 秒分析時間。
+                <b style="color:#fff;">💡 遊戲說明與兌換機制：</b><br/>1. 免登入、不搜集個人資料。<br/>2. 選取選項後按下「確定送出答案」。<br/>3. 完成測驗後，<b>憑結果頁面或活動憑票</b>即可至攤位兌換專屬好禮！
               </div>
               <button id="start-btn" class="primary-btn">開始職涯探索 →</button>
             </div>`;
@@ -123,20 +123,43 @@
               </div>
             </div>`;
         } else if (currentStep === 'RESULT') {
-          const roleKey = getResult();
-          const role = ROLES[roleKey];
-          const vList = VACANCIES[roleKey];
+          const topRoles = getResult();
+          
+          let roleHeaderHTML = '';
+          let vacancyList = [];
+
+          if (topRoles.length > 1) {
+            // 平票判定：跨界雙天賦
+            const r1 = ROLES[topRoles[0]];
+            const r2 = ROLES[topRoles[1]];
+            roleHeaderHTML = `
+              <div class="badge" style="background:rgba(255,215,0,0.15); border-color:#FFD700; color:#FFD700;">🌟 雙重天賦 / 跨界型人才</div>
+              <h2 style="font-size:20px; color:#fff; margin:8px 0;">${r1.title} × ${r2.title}</h2>
+              <p style="color:#aaa; font-size:12px; margin-bottom:12px;">${r1.subtitle} & ${r2.subtitle}</p>
+              <p style="color:#ddd; font-size:13px; text-align:left; line-height:1.5;">你在多個領域展現出強大的潛能！兼具 ${r1.title} 與 ${r2.title} 的特色，在橘子集團是非常具有彈性與創新跨界能力的關鍵人才。</p>
+            `;
+            // 合併兩者的推薦職缺
+            vacancyList = [...(VACANCIES[topRoles[0]] || []), ...(VACANCIES[topRoles[1]] || [])];
+          } else {
+            // 單一最高分角色
+            const role = ROLES[topRoles[0]];
+            roleHeaderHTML = `
+              <div style="color:#FF6600; font-size:12px; font-weight:bold;">YOUR CAREER ARCHETYPE</div>
+              <h2 style="font-size:22px; color:#fff; margin:8px 0;">${role.title}</h2>
+              <p style="color:#aaa; font-size:12px; margin-bottom:12px;">${role.subtitle}</p>
+              <p style="color:#ddd; font-size:13px; text-align:left; line-height:1.5;">${role.desc}</p>
+            `;
+            vacancyList = VACANCIES[topRoles[0]] || [];
+          }
+
           app.innerHTML = `
             <div>
               <div class="card" style="border-color:#FF6600; text-align:center;">
-                <div style="color:#FF6600; font-size:12px; font-weight:bold;">YOUR CAREER ARCHETYPE</div>
-                <h2 style="font-size:22px; color:#fff; margin:8px 0;">${role.title}</h2>
-                <p style="color:#aaa; font-size:12px; margin-bottom:12px;">${role.subtitle}</p>
-                <p style="color:#ddd; font-size:13px; text-align:left; line-height:1.5;">${role.desc}</p>
+                ${roleHeaderHTML}
               </div>
               <div class="card">
                 <div style="color:#fff; font-size:13px; font-weight:bold; margin-bottom:8px;">🚀 推薦延伸職缺領域</div>
-                ${vList.map(v => `
+                ${vacancyList.map(v => `
                   <div style="display:flex; justify-content:space-between; background:#121212; padding:8px 12px; border-radius:8px; font-size:12px; margin-bottom:6px;">
                     <span>${v.name}</span>
                     <a href="${v.url}" target="_blank" style="color:#FF6600; font-weight:bold; text-decoration:none;">查看 ↗</a>
@@ -144,7 +167,7 @@
               </div>
               <div class="card" style="background:rgba(255,102,0,0.15); border-color:#FF6600; text-align:center;">
                 <div style="color:#FF6600; font-weight:bold; font-size:14px;">感謝參與橘子集團 2027 校園徵才！</div>
-                <p style="color:#fff; font-size:12px; margin-top:4px;">🎁 出示此畫面給工作人員，即可兌換精美好禮！</p>
+                <p style="color:#fff; font-size:12px; margin-top:6px; font-weight:bold;">🎟️ 憑此結果頁面或活動憑票，即可向現場工作人員兌換專屬精美好禮！</p>
               </div>
             </div>`;
         }
@@ -175,10 +198,19 @@
         }, 1000);
       }
 
+      // 計算同分/最高分的平票處理邏輯
       function getResult() {
         const counts = { INNOVATOR:0, ANALYST:0, CONNECTOR:0, EXPLORER:0 };
         answers.forEach((ans, i) => { if (ans !== null) counts[QUESTIONS[i].options[ans].type]++; });
-        return Object.keys(counts).reduce((a, b) => counts[a] >= counts[b] ? a : b);
+        
+        let maxCount = 0;
+        Object.keys(counts).forEach(key => {
+          if (counts[key] > maxCount) maxCount = counts[key];
+        });
+
+        // 找出所有達到最高分的角色（若多於一個即為平票）
+        const topRoles = Object.keys(counts).filter(key => counts[key] === maxCount);
+        return topRoles;
       }
 
       function initApp() {
