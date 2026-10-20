@@ -37,18 +37,75 @@
 
     <script>
       const VACANCIES = {
-        INNOVATOR: [{ name: "遊戲企劃 / 遊戲設計師", url: "https://www.104.com.tw" }, { name: "品牌營銷企劃專員", url: "https://www.104.com.tw" }],
-        ANALYST: [{ name: "全端開發工程師", url: "https://www.104.com.tw" }, { name: "數據分析工程師", url: "https://www.104.com.tw" }],
-        CONNECTOR: [{ name: "跨國專案管理師 (PM)", url: "https://www.104.com.tw" }, { name: "社群營運專員", url: "https://www.104.com.tw" }],
-        EXPLORER: [{ name: "使用者體驗 UX 研究員", url: "https://www.104.com.tw" }, { name: "創新產品市場分析師", url: "https://www.104.com.tw" }]
+        INNOVATOR: [
+          { name: "遊戲企劃 / 遊戲設計師", url: "https://www.104.com.tw" },
+          { name: "品牌營銷企劃專員", url: "https://www.104.com.tw" }
+        ],
+        ANALYST: [
+          { name: "全端開發工程師", url: "https://www.104.com.tw" },
+          { name: "數據分析工程師", url: "https://www.104.com.tw" }
+        ],
+        CONNECTOR: [
+          { name: "跨國專案管理師 (PM)", url: "https://www.104.com.tw" },
+          { name: "社群營運專員", url: "https://www.104.com.tw" }
+        ],
+        EXPLORER: [
+          { name: "使用者體驗 UX 研究員", url: "https://www.104.com.tw" },
+          { name: "創新產品市場分析師", url: "https://www.104.com.tw" }
+        ]
       };
 
       const QUESTIONS = [
-        { id: 1, title: "專案啟動時，你最想扮演什麼角色？", options: [{ text: "提出顛覆性的創新概念與酷炫玩法", type: "INNOVATOR" }, { text: "規劃技術架構與數據分析流程", type: "ANALYST" }, { text: "跨團隊溝通協調，確保時程順利推進", type: "CONNECTOR" }, { text: "觀察玩家與市場潛在需求，找出新痛點", type: "EXPLORER" }] },
-        { id: 2, title: "當遇到突發的系統 Bug 或專案瓶頸，你會？", options: [{ text: "腦力激盪，試圖用非傳統的妙招繞過限制", type: "INNOVATOR" }, { text: "冷靜分析 Error Log，逐步除錯與定位問題", type: "ANALYST" }, { text: "快速召集相關成員，整合資源共同決策", type: "CONNECTOR" }, { text: "深入了解使用者的真實反饋，確認修復方向", type: "EXPLORER" }] },
-        { id: 3, title: "在團隊合作中，身邊的人最常稱讚你的是？", options: [{ text: "點子王！總是有源源不絕的靈感", type: "INNOVATOR" }, { text: "邏輯大師！邏輯嚴密且說服力強", type: "ANALYST" }, { text: "神級隊友！有你在進度就很令人安心", type: "CONNECTOR" }, { text: "敏銳雷達！總能察覺別人忽視的細節", type: "EXPLORER" }] },
-        { id: 4, title: "面對充滿不確定性的新任務時，你的第一步是？", options: [{ text: "邊做邊嘗試，在實作中驗證各種有趣想法", type: "INNOVATOR" }, { text: "蒐集市場數據與文獻，做嚴謹的評估報告", type: "ANALYST" }, { text: "拜訪相關領域的專家或夥伴，建立合作機制", type: "CONNECTOR" }, { text: "觀察競品優缺點，發掘尚未被滿足的缺口", type: "EXPLORER" }] },
-        { id: 5, title: "理想中的工作成就感來自於？", options: [{ text: "打造出令人驚豔、前所未見的創新產品", type: "INNOVATOR" }, { text: "破解高難度複雜問題，優化系統效率", type: "ANALYST" }, { text: "帶領團隊突破重圍，順利達成共同目標", type: "CONNECTOR" }, { text: "洞察市場趨勢，引領全新的商業方向", type: "EXPLORER" }] }
+        {
+          id: 1,
+          title: "專案啟動時，你最想扮演什麼角色？",
+          options: [
+            { text: "提出顛覆性的創新概念與酷炫玩法", type: "INNOVATOR" },
+            { text: "規劃技術架構與數據分析流程", type: "ANALYST" },
+            { text: "跨團隊溝通協調，確保時程順利推進", type: "CONNECTOR" },
+            { text: "觀察玩家與市場潛在需求，找出新痛點", type: "EXPLORER" }
+          ]
+        },
+        {
+          id: 2,
+          title: "當遇到突發的系統 Bug 或專案瓶頸，你會？",
+          options: [
+            { text: "腦力激盪，試圖用非傳統的妙招繞過限制", type: "INNOVATOR" },
+            { text: "冷靜分析 Error Log，逐步除錯與定位問題", type: "ANALYST" },
+            { text: "快速召集相關成員，整合資源共同決策", type: "CONNECTOR" },
+            { text: "深入了解使用者的真實反饋，確認修復方向", type: "EXPLORER" }
+          ]
+        },
+        {
+          id: 3,
+          title: "在團隊合作中，身邊的人最常稱讚你的是？",
+          options: [
+            { text: "點子王！總是有源源不絕的靈感", type: "INNOVATOR" },
+            { text: "邏輯大師！邏輯嚴密且說服力強", type: "ANALYST" },
+            { text: "神級隊友！有你在進度就很令人安心", type: "CONNECTOR" },
+            { text: "敏銳雷達！總能察覺別人忽視的細節", type: "EXPLORER" }
+          ]
+        },
+        {
+          id: 4,
+          title: "面對充滿不確定性的新任務時，你的第一步是？",
+          options: [
+            { text: "邊做邊嘗試，在實作中驗證各種有趣想法", type: "INNOVATOR" },
+            { text: "蒐集市場數據與文獻，做嚴謹的評估報告", type: "ANALYST" },
+            { text: "拜訪相關領域的專家或夥伴，建立合作機制", type: "CONNECTOR" },
+            { text: "觀察競品優缺點，發掘尚未被滿足的缺口", type: "EXPLORER" }
+          ]
+        },
+        {
+          id: 5,
+          title: "理想中的工作成就感來自於？",
+          options: [
+            { text: "打造出令人驚豔、前所未見的創新產品", type: "INNOVATOR" },
+            { text: "破解高難度複雜問題，優化系統效率", type: "ANALYST" },
+            { text: "帶領團隊突破重圍，順利達成共同目標", type: "CONNECTOR" },
+            { text: "洞察市場趨勢，引領全新的商業方向", type: "EXPLORER" }
+          ]
+        }
       ];
 
       const ROLES = {
@@ -58,90 +115,94 @@
         EXPLORER: { title: "洞察探索型", subtitle: "The Strategic Visionary", desc: "你對周遭變化有著敏銳的感知力！在橘子集團，你協助團隊在市場中取得先機。" }
       };
 
-      let currentQIdx = 0;
-      let answers = [null, null, null, null, null];
-      let remainSec = 10;
-      let timer = null;
+      let qIndex = 0;
+      let userAnswers = [null, null, null, null, null];
+      let timerId = null;
+      let secLeft = 10;
 
-      function renderHome() {
+      function stopTimer() {
+        if (timerId) {
+          clearInterval(timerId);
+          timerId = null;
+        }
+      }
+
+      function initApp() {
+        stopTimer();
+        qIndex = 0;
+        userAnswers = [null, null, null, null, null];
+        
         const app = document.getElementById('app');
         if (!app) return;
+
         app.innerHTML = `
           <div style="text-align:center;">
             <div class="badge">2027 台灣大學校園徵才</div>
             <h1 class="title">橘勢待發，職場勝局</h1>
             <p style="color:#aaa; font-size:14px; line-height:1.6; margin-bottom:16px;">透過 5 道職涯情境問答，探索你在橘子集團的獨特天賦！</p>
             <div class="card" style="font-size:12px; color:#ccc;">
-              <b style="color:#fff;">💡 說明：</b>點擊開始後將直接進入第 1 題！每題<b>作答倒數 10 秒</b>，倒數結束自動切換下一題。
+              <b style="color:#fff;">💡 說明：</b>點擊開始後將直接進入第 1 題！每題<b>作答時間 10 秒</b>，時間到自動進入下一題。
             </div>
-            <button id="join-btn" class="primary-btn">開始職涯探索 →</button>
+            <button id="start-btn" class="primary-btn">開始職涯探索 →</button>
           </div>`;
         
-        document.getElementById('join-btn').onclick = startTest;
+        document.getElementById('start-btn').onclick = runQuiz;
       }
 
-      function startTest() {
-        currentQIdx = 0;
-        answers = [null, null, null, null, null];
-        showQuestion();
-      }
+      function runQuiz() {
+        stopTimer();
 
-      function showQuestion() {
-        // 如果 5 題都結束了，立刻進入結果頁面
-        if (currentQIdx >= 5) {
-          if (timer) clearInterval(timer);
-          renderResult();
+        // 5 題已全數完成 ➔ 進入結果頁
+        if (qIndex >= 5) {
+          showResultPage();
           return;
         }
 
-        remainSec = 10;
+        secLeft = 10;
         const app = document.getElementById('app');
-        const q = QUESTIONS[currentQIdx];
+        const currentQ = QUESTIONS[qIndex];
 
         app.innerHTML = `
           <div>
             <div style="display:flex; justify-content:space-between; font-size:12px; color:#aaa; margin-bottom:8px;">
-              <span>QUESTION ${currentQIdx + 1} / 5</span>
-              <span id="timer-txt" style="color:#FF6600; font-weight:bold;">⏳ 倒數 ${remainSec} 秒</span>
+              <span>QUESTION ${qIndex + 1} / 5</span>
+              <span id="timer-txt" style="color:#FF6600; font-weight:bold;">⏳ 倒數 ${secLeft} 秒</span>
             </div>
             <div class="progress-bar"><div id="progress-fill" class="progress-fill" style="width:100%;"></div></div>
-            <h2 style="font-size:16px; margin-bottom:16px; font-weight:bold;">${q.title}</h2>
-            ${q.options.map((opt, i) => `
-              <button class="opt-btn ${answers[currentQIdx] === i ? 'selected' : ''}" onclick="selectOpt(${i})">
+            <h2 style="font-size:16px; margin-bottom:16px; font-weight:bold;">${currentQ.title}</h2>
+            ${currentQ.options.map((opt, i) => `
+              <button class="opt-btn ${userAnswers[qIndex] === i ? 'selected' : ''}" onclick="pickOption(${i})">
                 <span style="border:1px solid currentColor; padding:0 6px; border-radius:4px; font-weight:bold;">${String.fromCharCode(65+i)}</span>
                 <span>${opt.text}</span>
               </button>`).join('')}
             <p style="color:#666; font-size:11px; text-align:center; margin-top:10px;">💡 請點擊選項鎖定答案，10 秒結束後自動跳下一題</p>
           </div>`;
 
-        // 開啟 10 秒倒數計時器
-        if (timer) clearInterval(timer);
-        timer = setInterval(() => {
-          remainSec--;
-          const timerTxt = document.getElementById('timer-txt');
-          const fill = document.getElementById('progress-fill');
-          if (timerTxt) timerTxt.innerText = `⏳ 倒數 ${remainSec} 秒`;
-          if (fill) fill.style.width = `${(remainSec / 10) * 100}%`;
+        // 開啟當前題目的倒數
+        timerId = setInterval(() => {
+          secLeft--;
+          const txt = document.getElementById('timer-txt');
+          const bar = document.getElementById('progress-fill');
+          if (txt) txt.innerText = `⏳ 倒數 ${secLeft} 秒`;
+          if (bar) bar.style.width = `${(secLeft / 10) * 100}%`;
 
-          // 時間到，進入下一題
-          if (remainSec <= 0) {
-            clearInterval(timer);
-            // 若學生未選擇答案，預設帶入第一個選項
-            if (answers[currentQIdx] === null) {
-              answers[currentQIdx] = 0;
+          // 倒數完畢 ➔ 進下一題
+          if (secLeft <= 0) {
+            stopTimer();
+            if (userAnswers[qIndex] === null) {
+              userAnswers[qIndex] = 0; // 沒選預設補選 A
             }
-            currentQIdx++;
-            showQuestion();
+            qIndex++;
+            runQuiz();
           }
         }, 1000);
       }
 
-      function selectOpt(optIdx) {
-        answers[currentQIdx] = optIdx;
-        // 重新繪製畫面以高亮顯示選中的選項
-        const buttons = document.querySelectorAll('.opt-btn');
-        buttons.forEach((btn, idx) => {
-          if (idx === optIdx) {
+      function pickOption(optIdx) {
+        userAnswers[qIndex] = optIdx;
+        const btns = document.querySelectorAll('.opt-btn');
+        btns.forEach((btn, i) => {
+          if (i === optIdx) {
             btn.classList.add('selected');
           } else {
             btn.classList.remove('selected');
@@ -149,46 +210,42 @@
         });
       }
 
-      function renderResult() {
-        // 100% 徹底關閉背景計時器，防止任何重複觸發
-        if (timer) {
-          clearInterval(timer);
-          timer = null;
-        }
+      function showResultPage() {
+        stopTimer(); // 徹底斷開倒數計時器
 
-        const topRoles = getResult();
-        let roleHeaderHTML = '';
-        let vacancyList = [];
+        const winningTypes = calculateScores();
+        let roleHTML = '';
+        let jobList = [];
 
-        if (topRoles.length > 1) {
-          const r1 = ROLES[topRoles[0]];
-          const r2 = ROLES[topRoles[1]];
-          roleHeaderHTML = `
+        if (winningTypes.length > 1) {
+          const r1 = ROLES[winningTypes[0]];
+          const r2 = ROLES[winningTypes[1]];
+          roleHTML = `
             <div class="badge" style="background:rgba(255,215,0,0.15); border-color:#FFD700; color:#FFD700;">🌟 雙重天賦 / 跨界型人才</div>
             <h2 style="font-size:20px; color:#fff; margin:8px 0;">${r1.title} × ${r2.title}</h2>
             <p style="color:#aaa; font-size:12px; margin-bottom:12px;">${r1.subtitle} & ${r2.subtitle}</p>
             <p style="color:#ddd; font-size:13px; text-align:left; line-height:1.5;">你在多個面向展現出均勻且強大的潛力！同時具備 ${r1.title} 與 ${r2.title} 的特色，在橘子集團是極具彈性與跨界整合能力的關鍵角色。</p>
           `;
-          vacancyList = [...(VACANCIES[topRoles[0]] || []), ...(VACANCIES[topRoles[1]] || [])];
+          jobList = [...(VACANCIES[winningTypes[0]] || []), ...(VACANCIES[winningTypes[1]] || [])];
         } else {
-          const role = ROLES[topRoles[0]];
-          roleHeaderHTML = `
+          const role = ROLES[winningTypes[0]];
+          roleHTML = `
             <div style="color:#FF6600; font-size:12px; font-weight:bold;">YOUR CAREER ARCHETYPE</div>
             <h2 style="font-size:22px; color:#fff; margin:8px 0;">${role.title}</h2>
             <p style="color:#aaa; font-size:12px; margin-bottom:12px;">${role.subtitle}</p>
             <p style="color:#ddd; font-size:13px; text-align:left; line-height:1.5;">${role.desc}</p>
           `;
-          vacancyList = VACANCIES[topRoles[0]] || [];
+          jobList = VACANCIES[winningTypes[0]] || [];
         }
 
         document.getElementById('app').innerHTML = `
           <div>
             <div class="card" style="border-color:#FF6600; text-align:center;">
-              ${roleHeaderHTML}
+              ${roleHTML}
             </div>
             <div class="card">
               <div style="color:#fff; font-size:13px; font-weight:bold; margin-bottom:8px;">🚀 推薦延伸職缺領域</div>
-              ${vacancyList.map(v => `
+              ${jobList.map(v => `
                 <div style="display:flex; justify-content:space-between; background:#121212; padding:8px 12px; border-radius:8px; font-size:12px; margin-bottom:6px;">
                   <span>${v.name}</span>
                   <a href="${v.url}" target="_blank" style="color:#FF6600; font-weight:bold; text-decoration:none;">查看 ↗</a>
@@ -201,32 +258,29 @@
           </div>`;
       }
 
-      function getResult() {
-        const counts = { INNOVATOR: 0, ANALYST: 0, CONNECTOR: 0, EXPLORER: 0 };
-        answers.forEach((ansIndex, qIndex) => {
-          if (ansIndex !== null && QUESTIONS[qIndex] && QUESTIONS[qIndex].options[ansIndex]) {
-            const type = QUESTIONS[qIndex].options[ansIndex].type;
-            counts[type] = (counts[type] || 0) + 1;
-          } else {
-            const types = ['INNOVATOR', 'ANALYST', 'CONNECTOR', 'EXPLORER'];
-            counts[types[qIndex % 4]]++;
+      function calculateScores() {
+        const tally = { INNOVATOR: 0, ANALYST: 0, CONNECTOR: 0, EXPLORER: 0 };
+        userAnswers.forEach((ansIndex, qIdx) => {
+          if (ansIndex !== null && QUESTIONS[qIdx] && QUESTIONS[qIdx].options[ansIndex]) {
+            const t = QUESTIONS[qIdx].options[ansIndex].type;
+            tally[t] = (tally[t] || 0) + 1;
           }
         });
 
-        let maxCount = -1;
-        for (const type in counts) {
-          if (counts[type] > maxCount) maxCount = counts[type];
+        let highest = -1;
+        for (const k in tally) {
+          if (tally[k] > highest) highest = tally[k];
         }
 
         const winners = [];
-        for (const type in counts) {
-          if (counts[type] === maxCount) winners.push(type);
+        for (const k in tally) {
+          if (tally[k] === highest) winners.push(k);
         }
         return winners;
       }
 
-      window.addEventListener('DOMContentLoaded', renderHome);
-      window.addEventListener('load', renderHome);
+      window.addEventListener('DOMContentLoaded', initApp);
+      window.addEventListener('load', initApp);
     </script>
   </body>
 </html>
