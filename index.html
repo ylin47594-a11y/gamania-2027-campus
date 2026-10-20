@@ -20,7 +20,7 @@
       .primary-btn { width: 100%; background: #FF6600; color: #000; font-weight: 800; font-size: 16px; padding: 14px; border-radius: 12px; border: none; cursor: pointer; margin-top: 12px; }
       .primary-btn:hover { background: #ff771a; }
       .opt-btn { width: 100%; background: #1A1A1A; border: 1px solid #333; color: #ddd; padding: 14px; border-radius: 12px; text-align: left; margin-bottom: 10px; cursor: pointer; font-size: 14px; display: flex; gap: 10px; transition: 0.2s; }
-      .opt-btn.selected { border-color: #FF6600; background: rgba(255,102,0,0.2); color: #fff; font-weight: bold; }
+      .opt-btn.selected { border-color: #FF6600; background: rgba(255,102,0,0.25); color: #fff; font-weight: bold; }
       .progress-bar { width: 100%; height: 6px; background: #333; border-radius: 3px; overflow: hidden; margin-bottom: 16px; }
       .progress-fill { height: 100%; background: #FF6600; transition: width 0.2s linear; }
     </style>
@@ -28,7 +28,7 @@
   <body>
     <header>
       <div class="brand"><div class="dot"></div>GAMANIA 2027</div>
-      <div class="sync-tag">⚡ 定時同步測試</div>
+      <div class="sync-tag">⚡ 職涯探索</div>
     </header>
 
     <main id="app"></main>
@@ -58,14 +58,10 @@
         EXPLORER: { title: "洞察探索型", subtitle: "The Strategic Visionary", desc: "你對周遭變化有著敏銳的感知力！在橘子集團，你協助團隊在市場中取得先機。" }
       };
 
-      const Q_TIME = 10; 
-      const I_TIME = 4;  
-      
-      let gameStarted = false;
-      let gameFinished = false;
+      let currentQIdx = 0;
       let answers = [null, null, null, null, null];
-      let startTimestamp = 0;
-      let timerInterval = null;
+      let remainSec = 10;
+      let timer = null;
 
       function renderHome() {
         const app = document.getElementById('app');
@@ -74,9 +70,9 @@
           <div style="text-align:center;">
             <div class="badge">2027 台灣大學校園徵才</div>
             <h1 class="title">橘勢待發，職場勝局</h1>
-            <p style="color:#aaa; font-size:14px; line-height:1.6; margin-bottom:16px;">全場 10 秒快問快答！透過 5 道職涯情境問答，探索你在橘子集團的獨特天賦！</p>
+            <p style="color:#aaa; font-size:14px; line-height:1.6; margin-bottom:16px;">透過 5 道職涯情境問答，探索你在橘子集團的獨特天賦！</p>
             <div class="card" style="font-size:12px; color:#ccc;">
-              <b style="color:#fff;">💡 說明：</b>按下按鈕開啟測驗，每題作答時間 <b>10 秒</b>，完成後即可解鎖專屬職場角色與好禮兌換憑證！
+              <b style="color:#fff;">💡 說明：</b>點擊開始後將直接進入第 1 題！每題<b>作答倒數 10 秒</b>，倒數結束自動切換下一題。
             </div>
             <button id="join-btn" class="primary-btn">開始職涯探索 →</button>
           </div>`;
@@ -85,79 +81,81 @@
       }
 
       function startTest() {
-        gameStarted = true;
-        gameFinished = false;
+        currentQIdx = 0;
         answers = [null, null, null, null, null];
-        startTimestamp = Date.now();
-        
-        if (timerInterval) clearInterval(timerInterval);
-        updateCycle();
-        timerInterval = setInterval(updateCycle, 200);
+        showQuestion();
       }
 
-      function updateCycle() {
-        if (!gameStarted || gameFinished) return;
-        const app = document.getElementById('app');
-        if (!app) return;
-
-        const elapsedSec = Math.floor((Date.now() - startTimestamp) / 1000);
-        const roundDuration = Q_TIME + I_TIME; 
-        const activeQIdx = Math.floor(elapsedSec / roundDuration);
-        const subSec = elapsedSec % roundDuration;
-
-        // 當 5 題全部完成時，立即清除計時器，強制跳轉至結果頁面
-        if (activeQIdx >= 5) {
-          gameFinished = true;
-          if (timerInterval) {
-            clearInterval(timerInterval);
-            timerInterval = null;
-          }
+      function showQuestion() {
+        // 如果 5 題都結束了，立刻進入結果頁面
+        if (currentQIdx >= 5) {
+          if (timer) clearInterval(timer);
           renderResult();
           return;
         }
 
-        if (subSec < Q_TIME) {
-          const remain = Q_TIME - subSec;
-          const percent = (remain / Q_TIME) * 100;
-          const q = QUESTIONS[activeQIdx];
+        remainSec = 10;
+        const app = document.getElementById('app');
+        const q = QUESTIONS[currentQIdx];
 
-          app.innerHTML = `
-            <div>
-              <div style="display:flex; justify-content:space-between; font-size:12px; color:#aaa; margin-bottom:8px;">
-                <span>QUESTION ${activeQIdx + 1} / 5</span>
-                <span style="color:#FF6600; font-weight:bold;">⏳ 倒數 ${remain} 秒</span>
-              </div>
-              <div class="progress-bar"><div class="progress-fill" style="width:${percent}%;"></div></div>
-              <h2 style="font-size:16px; margin-bottom:16px; font-weight:bold;">${q.title}</h2>
-              ${q.options.map((opt, i) => `
-                <button class="opt-btn ${answers[activeQIdx] === i ? 'selected' : ''}" onclick="selectOpt(${activeQIdx},${i})">
-                  <span style="border:1px solid currentColor; padding:0 6px; border-radius:4px; font-weight:bold;">${String.fromCharCode(65+i)}</span>
-                  <span>${opt.text}</span>
-                </button>`).join('')}
-              <p style="color:#666; font-size:11px; text-align:center; margin-top:10px;">💡 請迅速點擊選項，10 秒時間結束將自動進入下一題</p>
-            </div>`;
-        } else {
-          const remain = roundDuration - subSec;
-          app.innerHTML = `
-            <div style="text-align:center; padding:30px 0;">
-              <div class="badge">⚡ 戰力數據分析中... (${activeQIdx+1}/5)</div>
-              <div style="font-size:42px; font-weight:900; color:#FF6600; margin:20px 0;">${remain}</div>
-              <div class="card" style="text-align:left;">
-                <div style="color:#FF6600; font-size:12px;">已選擇答案：</div>
-                <div style="color:#fff; font-weight:bold; margin-top:4px;">
-                  ${answers[activeQIdx] !== null ? QUESTIONS[activeQIdx].options[answers[activeQIdx]].text : '（未選擇，系統自動計算）'}
-                </div>
-              </div>
-            </div>`;
-        }
+        app.innerHTML = `
+          <div>
+            <div style="display:flex; justify-content:space-between; font-size:12px; color:#aaa; margin-bottom:8px;">
+              <span>QUESTION ${currentQIdx + 1} / 5</span>
+              <span id="timer-txt" style="color:#FF6600; font-weight:bold;">⏳ 倒數 ${remainSec} 秒</span>
+            </div>
+            <div class="progress-bar"><div id="progress-fill" class="progress-fill" style="width:100%;"></div></div>
+            <h2 style="font-size:16px; margin-bottom:16px; font-weight:bold;">${q.title}</h2>
+            ${q.options.map((opt, i) => `
+              <button class="opt-btn ${answers[currentQIdx] === i ? 'selected' : ''}" onclick="selectOpt(${i})">
+                <span style="border:1px solid currentColor; padding:0 6px; border-radius:4px; font-weight:bold;">${String.fromCharCode(65+i)}</span>
+                <span>${opt.text}</span>
+              </button>`).join('')}
+            <p style="color:#666; font-size:11px; text-align:center; margin-top:10px;">💡 請點擊選項鎖定答案，10 秒結束後自動跳下一題</p>
+          </div>`;
+
+        // 開啟 10 秒倒數計時器
+        if (timer) clearInterval(timer);
+        timer = setInterval(() => {
+          remainSec--;
+          const timerTxt = document.getElementById('timer-txt');
+          const fill = document.getElementById('progress-fill');
+          if (timerTxt) timerTxt.innerText = `⏳ 倒數 ${remainSec} 秒`;
+          if (fill) fill.style.width = `${(remainSec / 10) * 100}%`;
+
+          // 時間到，進入下一題
+          if (remainSec <= 0) {
+            clearInterval(timer);
+            // 若學生未選擇答案，預設帶入第一個選項
+            if (answers[currentQIdx] === null) {
+              answers[currentQIdx] = 0;
+            }
+            currentQIdx++;
+            showQuestion();
+          }
+        }, 1000);
       }
 
-      function selectOpt(qIdx, optIdx) {
-        answers[qIdx] = optIdx;
-        updateCycle();
+      function selectOpt(optIdx) {
+        answers[currentQIdx] = optIdx;
+        // 重新繪製畫面以高亮顯示選中的選項
+        const buttons = document.querySelectorAll('.opt-btn');
+        buttons.forEach((btn, idx) => {
+          if (idx === optIdx) {
+            btn.classList.add('selected');
+          } else {
+            btn.classList.remove('selected');
+          }
+        });
       }
 
       function renderResult() {
+        // 100% 徹底關閉背景計時器，防止任何重複觸發
+        if (timer) {
+          clearInterval(timer);
+          timer = null;
+        }
+
         const topRoles = getResult();
         let roleHeaderHTML = '';
         let vacancyList = [];
