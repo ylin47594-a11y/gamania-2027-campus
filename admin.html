@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>橘子集團 2027 校徵｜現場控場控制台</title>
+    <script src="https://unpkg.com/peerjs@1.5.2/dist/peerjs.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/qrcode-generator@1.4.4/qrcode.min.js"></script>
+    <style>
+      * { box-sizing: border-box; margin: 0; padding: 0; font-family: sans-serif; }
+      body { background: #121212; color: #fff; padding: 20px; max-width: 600px; margin: 0 auto; text-align: center; }
+      h1 { color: #FF6600; font-size: 20px; margin-bottom: 10px; }
+      .card { background: #1A1A1A; border: 1px solid #333; padding: 16px; border-radius: 12px; margin-bottom: 16px; text-align: left; }
+      .btn { width: 100%; background: #FF6600; color: #000; font-weight: bold; padding: 14px; border: none; border-radius: 8px; cursor: pointer; font-size: 16px; margin-bottom: 8px; }
+      .btn:hover { background: #ff8833; }
+      .btn-secondary { background: #333; color: #fff; }
+      .btn-secondary:hover { background: #444; }
+      #qrcode img { display: block; margin: 10px auto; background: #fff; padding: 10px; border-radius: 8px; }
+      .count-badge { font-size: 24px; font-weight: bold; color: #00FF66; text-align: center; margin: 10px 0; }
+    </style>
+  </head>
+  <body>
+    <h1>🍊 橘子集團 2027 校徵控制台</h1>
+    <div class="card" style="text-align:center;">
+      <div style="font-size:12px; color:#888;">請現場學生掃描以下 QR Code 進入同步房間：</div>
+      <div id="qrcode"></div>
+      <div style="font-size:11px; color:#aaa; word-break:break-all;" id="student-url"></div>
+      <div style="margin-top:10px; font-size:12px;">已連線人數：</div>
+      <div id="peer-count" class="count-badge">0 人</div>
+    </div>
+
+    <div class="card">
+      <div style="font-size:14px; font-weight:bold; color:#FF6600; margin-bottom:10px;">🎮 控制台操作選單</div>
+      <button class="btn" onclick="sendCmd('GOTO_QUESTION', 0)">1. 統一開啟：第 1 題</button>
+      <button class="btn" onclick="sendCmd('GOTO_QUESTION', 1)">2. 統一切換：第 2 題</button>
+      <button class="btn" onclick="sendCmd('GOTO_QUESTION', 2)">3. 統一切換：第 3 題</button>
+      <button class="btn" onclick="sendCmd('GOTO_QUESTION', 3)">4. 統一切換：第 4 題</button>
+      <button class="btn" onclick="sendCmd('GOTO_QUESTION', 4)">5. 統一切換：第 5 題</button>
+      <button class="btn" style="background:#00FF66; color:#000;" onclick="sendCmd('SHOW_RESULT')">🏆 統一公布結果 & 兌換頁面</button>
+      <button class="btn btn-secondary" onclick="sendCmd('RESET')">🔄 重置全場回等待頁</button>
+    </div>
+
+    <script>
+      const roomId = 'gamania2027';
+      const studentUrl = `${window.location.origin}${window.location.pathname.replace('admin.html', '')}index.html?room=${roomId}`;
+      
+      document.getElementById('student-url').innerText = studentUrl;
+
+      // 生成 QR Code
+      const qr = qrcode(0, 'M');
+      qr.addData(studentUrl);
+      qr.make();
+      document.getElementById('qrcode').innerHTML = qr.createImgTag(5);
+
+      const peer = new Peer(roomId);
+      const connections = [];
+
+      peer.on('open', (id) => {
+        console.log('控制台已就緒，ID:', id);
+      });
+
+      peer.on('connection', (conn) => {
+        connections.push(conn);
+        updateCount();
+        conn.on('close', () => {
+          const idx = connections.indexOf(conn);
+          if (idx !== -1) connections.splice(idx, 1);
+          updateCount();
+        });
+      });
+
+      function updateCount() {
+        document.getElementById('peer-count').innerText = `${connections.length} 人`;
+      }
+
+      function sendCmd(type, qIdx = 0) {
+        connections.forEach(conn => {
+          if (conn.open) {
+            conn.send({ type, qIdx });
+          }
+        });
+      }
+    </script>
+  </body>
+</html>
