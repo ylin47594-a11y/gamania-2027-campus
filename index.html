@@ -31,17 +31,7 @@
       <div class="sync-tag">⚡ 全場定時同步</div>
     </header>
 
-    <main id="app">
-      <div style="text-align:center;">
-        <div class="badge">2027 台灣大學校園徵才</div>
-        <h1 class="title">橘勢待發，職場勝局</h1>
-        <p style="color:#aaa; font-size:14px; line-height:1.6; margin-bottom:16px;">全場 10 秒快問快答！透過 5 道職涯情境問答，探索你在橘子集團的獨特天賦！</p>
-        <div class="card" style="font-size:12px; color:#ccc;">
-          <b style="color:#fff;">💡 說明：</b>全場同學將同步進行 5 道題目測試，每題作答時間 <b>10 秒</b>。按下按鈕即可加入目前進行中的測試！
-        </div>
-        <button id="join-btn" class="primary-btn" onclick="startTest()">加入現場同步測驗 →</button>
-      </div>
-    </main>
+    <main id="app"></main>
 
     <footer>© 2027 橘子集團 Gamania Group. All Rights Reserved.</footer>
 
@@ -70,28 +60,50 @@
 
       const Q_TIME = 10; 
       const I_TIME = 4;  
-      const TOTAL_ROUND = (Q_TIME + I_TIME) * 5;
-
+      
       let gameStarted = false;
+      let gameFinished = false;
       let answers = [null, null, null, null, null];
-      let activeQIdx = 0;
+      let startTimestamp = 0;
+      let timerInterval = null;
+
+      function renderHome() {
+        const app = document.getElementById('app');
+        if (!app) return;
+        app.innerHTML = `
+          <div style="text-align:center;">
+            <div class="badge">2027 台灣大學校園徵才</div>
+            <h1 class="title">橘勢待發，職場勝局</h1>
+            <p style="color:#aaa; font-size:14px; line-height:1.6; margin-bottom:16px;">全場 10 秒快問快答！透過 5 道職涯情境問答，探索你在橘子集團的獨特天賦！</p>
+            <div class="card" style="font-size:12px; color:#ccc;">
+              <b style="color:#fff;">💡 說明：</b>按下按鈕開啟測驗，每題作答時間 <b>10 秒</b>，完成後即可解鎖專屬職場角色與好禮兌換憑證！
+            </div>
+            <button id="join-btn" class="primary-btn">開始職涯探索 →</button>
+          </div>`;
+        
+        document.getElementById('join-btn').onclick = startTest;
+      }
 
       function startTest() {
         gameStarted = true;
+        gameFinished = false;
+        answers = [null, null, null, null, null];
+        startTimestamp = Date.now();
+        
+        if (timerInterval) clearInterval(timerInterval);
         updateCycle();
-        setInterval(updateCycle, 1000);
+        timerInterval = setInterval(updateCycle, 1000);
       }
 
       function updateCycle() {
-        if (!gameStarted) return;
+        if (!gameStarted || gameFinished) return;
         const app = document.getElementById('app');
         if (!app) return;
 
-        const nowSec = Math.floor(Date.now() / 1000);
-        const currentProgress = nowSec % TOTAL_ROUND;
+        const elapsedSec = Math.floor((Date.now() - startTimestamp) / 1000);
         const roundDuration = Q_TIME + I_TIME; 
-        activeQIdx = Math.floor(currentProgress / roundDuration);
-        const subSec = currentProgress % roundDuration;
+        const activeQIdx = Math.floor(elapsedSec / roundDuration);
+        const subSec = elapsedSec % roundDuration;
 
         if (activeQIdx < 5) {
           if (subSec < Q_TIME) {
@@ -103,16 +115,16 @@
               <div>
                 <div style="display:flex; justify-content:space-between; font-size:12px; color:#aaa; margin-bottom:8px;">
                   <span>QUESTION ${activeQIdx + 1} / 5</span>
-                  <span style="color:#FF6600; font-weight:bold;">⏳ 快問快答倒數：${remain} 秒</span>
+                  <span style="color:#FF6600; font-weight:bold;">⏳ 倒數 ${remain} 秒</span>
                 </div>
                 <div class="progress-bar"><div class="progress-fill" style="width:${percent}%;"></div></div>
                 <h2 style="font-size:16px; margin-bottom:16px; font-weight:bold;">${q.title}</h2>
                 ${q.options.map((opt, i) => `
-                  <button class="opt-btn ${answers[activeQIdx] === i ? 'selected' : ''}" onclick="selectOpt(${i})">
+                  <button class="opt-btn ${answers[activeQIdx] === i ? 'selected' : ''}" onclick="selectOpt(${activeQIdx},${i})">
                     <span style="border:1px solid currentColor; padding:0 6px; border-radius:4px; font-weight:bold;">${String.fromCharCode(65+i)}</span>
                     <span>${opt.text}</span>
                   </button>`).join('')}
-                <p style="color:#666; font-size:11px; text-align:center; margin-top:10px;">💡 請迅速點擊選項鎖定答案，10 秒結束將自動跳下一題</p>
+                <p style="color:#666; font-size:11px; text-align:center; margin-top:10px;">💡 請迅速點擊選項，10 秒時間結束將自動進入下一題</p>
               </div>`;
           } else {
             const remain = roundDuration - subSec;
@@ -123,18 +135,20 @@
                 <div class="card" style="text-align:left;">
                   <div style="color:#FF6600; font-size:12px;">已選擇答案：</div>
                   <div style="color:#fff; font-weight:bold; margin-top:4px;">
-                    ${answers[activeQIdx] !== null ? QUESTIONS[activeQIdx].options[answers[activeQIdx]].text : '（未選擇，系統將自動推薦計算）'}
+                    ${answers[activeQIdx] !== null ? QUESTIONS[activeQIdx].options[answers[activeQIdx]].text : '（未選擇，系統自動計算）'}
                   </div>
                 </div>
               </div>`;
           }
         } else {
+          gameFinished = true;
+          if (timerInterval) clearInterval(timerInterval);
           renderResult();
         }
       }
 
-      function selectOpt(i) {
-        answers[activeQIdx] = i;
+      function selectOpt(qIdx, optIdx) {
+        answers[qIdx] = optIdx;
         updateCycle();
       }
 
@@ -181,7 +195,6 @@
               <div style="color:#FF6600; font-weight:bold; font-size:14px;">感謝參與橘子集團 2027 校園徵才！</div>
               <p style="color:#fff; font-size:12px; margin-top:6px; font-weight:bold;">🎟️ 憑此結果頁面或活動憑票，即可向現場工作人員兌換專屬精美好禮！</p>
             </div>
-            <button class="primary-btn" onclick="location.reload()">🔄 重新加入下一輪測試</button>
           </div>`;
       }
 
@@ -208,6 +221,9 @@
         }
         return winners;
       }
+
+      window.addEventListener('DOMContentLoaded', renderHome);
+      window.addEventListener('load', renderHome);
     </script>
   </body>
 </html>
