@@ -28,7 +28,7 @@
   <body>
     <header>
       <div class="brand"><div class="dot"></div>GAMANIA 2027</div>
-      <div class="sync-tag">⚡ 全場定時同步</div>
+      <div class="sync-tag">⚡ 定時同步測試</div>
     </header>
 
     <main id="app"></main>
@@ -92,7 +92,7 @@
         
         if (timerInterval) clearInterval(timerInterval);
         updateCycle();
-        timerInterval = setInterval(updateCycle, 1000);
+        timerInterval = setInterval(updateCycle, 200);
       }
 
       function updateCycle() {
@@ -105,45 +105,50 @@
         const activeQIdx = Math.floor(elapsedSec / roundDuration);
         const subSec = elapsedSec % roundDuration;
 
-        if (activeQIdx < 5) {
-          if (subSec < Q_TIME) {
-            const remain = Q_TIME - subSec;
-            const percent = (remain / Q_TIME) * 100;
-            const q = QUESTIONS[activeQIdx];
-
-            app.innerHTML = `
-              <div>
-                <div style="display:flex; justify-content:space-between; font-size:12px; color:#aaa; margin-bottom:8px;">
-                  <span>QUESTION ${activeQIdx + 1} / 5</span>
-                  <span style="color:#FF6600; font-weight:bold;">⏳ 倒數 ${remain} 秒</span>
-                </div>
-                <div class="progress-bar"><div class="progress-fill" style="width:${percent}%;"></div></div>
-                <h2 style="font-size:16px; margin-bottom:16px; font-weight:bold;">${q.title}</h2>
-                ${q.options.map((opt, i) => `
-                  <button class="opt-btn ${answers[activeQIdx] === i ? 'selected' : ''}" onclick="selectOpt(${activeQIdx},${i})">
-                    <span style="border:1px solid currentColor; padding:0 6px; border-radius:4px; font-weight:bold;">${String.fromCharCode(65+i)}</span>
-                    <span>${opt.text}</span>
-                  </button>`).join('')}
-                <p style="color:#666; font-size:11px; text-align:center; margin-top:10px;">💡 請迅速點擊選項，10 秒時間結束將自動進入下一題</p>
-              </div>`;
-          } else {
-            const remain = roundDuration - subSec;
-            app.innerHTML = `
-              <div style="text-align:center; padding:30px 0;">
-                <div class="badge">⚡ 戰力數據分析中... (${activeQIdx+1}/5)</div>
-                <div style="font-size:42px; font-weight:900; color:#FF6600; margin:20px 0;">${remain}</div>
-                <div class="card" style="text-align:left;">
-                  <div style="color:#FF6600; font-size:12px;">已選擇答案：</div>
-                  <div style="color:#fff; font-weight:bold; margin-top:4px;">
-                    ${answers[activeQIdx] !== null ? QUESTIONS[activeQIdx].options[answers[activeQIdx]].text : '（未選擇，系統自動計算）'}
-                  </div>
-                </div>
-              </div>`;
-          }
-        } else {
+        // 當 5 題全部完成時，立即清除計時器，強制跳轉至結果頁面
+        if (activeQIdx >= 5) {
           gameFinished = true;
-          if (timerInterval) clearInterval(timerInterval);
+          if (timerInterval) {
+            clearInterval(timerInterval);
+            timerInterval = null;
+          }
           renderResult();
+          return;
+        }
+
+        if (subSec < Q_TIME) {
+          const remain = Q_TIME - subSec;
+          const percent = (remain / Q_TIME) * 100;
+          const q = QUESTIONS[activeQIdx];
+
+          app.innerHTML = `
+            <div>
+              <div style="display:flex; justify-content:space-between; font-size:12px; color:#aaa; margin-bottom:8px;">
+                <span>QUESTION ${activeQIdx + 1} / 5</span>
+                <span style="color:#FF6600; font-weight:bold;">⏳ 倒數 ${remain} 秒</span>
+              </div>
+              <div class="progress-bar"><div class="progress-fill" style="width:${percent}%;"></div></div>
+              <h2 style="font-size:16px; margin-bottom:16px; font-weight:bold;">${q.title}</h2>
+              ${q.options.map((opt, i) => `
+                <button class="opt-btn ${answers[activeQIdx] === i ? 'selected' : ''}" onclick="selectOpt(${activeQIdx},${i})">
+                  <span style="border:1px solid currentColor; padding:0 6px; border-radius:4px; font-weight:bold;">${String.fromCharCode(65+i)}</span>
+                  <span>${opt.text}</span>
+                </button>`).join('')}
+              <p style="color:#666; font-size:11px; text-align:center; margin-top:10px;">💡 請迅速點擊選項，10 秒時間結束將自動進入下一題</p>
+            </div>`;
+        } else {
+          const remain = roundDuration - subSec;
+          app.innerHTML = `
+            <div style="text-align:center; padding:30px 0;">
+              <div class="badge">⚡ 戰力數據分析中... (${activeQIdx+1}/5)</div>
+              <div style="font-size:42px; font-weight:900; color:#FF6600; margin:20px 0;">${remain}</div>
+              <div class="card" style="text-align:left;">
+                <div style="color:#FF6600; font-size:12px;">已選擇答案：</div>
+                <div style="color:#fff; font-weight:bold; margin-top:4px;">
+                  ${answers[activeQIdx] !== null ? QUESTIONS[activeQIdx].options[answers[activeQIdx]].text : '（未選擇，系統自動計算）'}
+                </div>
+              </div>
+            </div>`;
         }
       }
 
