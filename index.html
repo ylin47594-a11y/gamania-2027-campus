@@ -163,3 +163,62 @@
               ${vacancyList.map(v => `
                 <div style="display:flex; justify-content:space-between; background:#121212; padding:8px 12px; border-radius:8px; font-size:12px; margin-bottom:6px;">
                   <span>${v.name}</span>
+                  <a href="${v.url}" target="_blank" style="color:#FF6600; font-weight:bold; text-decoration:none;">查看 ↗</a>
+                </div>`).join('')}
+            </div>
+            <div class="card" style="background:rgba(255,102,0,0.15); border-color:#FF6600; text-align:center;">
+              <div style="color:#FF6600; font-weight:bold; font-size:14px;">感謝參與橘子集團 2027 校園徵才！</div>
+              <p style="color:#fff; font-size:12px; margin-top:6px; font-weight:bold;">🎟️ 憑此結果頁面或活動憑票，即可向現場工作人員兌換專屬精美好禮！</p>
+            </div>
+            <button class="primary-btn" onclick="location.reload()">🔄 重新加入下一輪測試</button>
+          </div>`;
+      }
+
+      function getResult() {
+        const counts = { INNOVATOR: 0, ANALYST: 0, CONNECTOR: 0, EXPLORER: 0 };
+        answers.forEach((ansIndex, qIndex) => {
+          if (ansIndex !== null && QUESTIONS[qIndex] && QUESTIONS[qIndex].options[ansIndex]) {
+            const type = QUESTIONS[qIndex].options[ansIndex].type;
+            counts[type] = (counts[type] || 0) + 1;
+          } else {
+            const types = ['INNOVATOR', 'ANALYST', 'CONNECTOR', 'EXPLORER'];
+            counts[types[qIndex % 4]]++;
+          }
+        });
+
+        let maxCount = -1;
+        for (const type in counts) {
+          if (counts[type] > maxCount) maxCount = counts[type];
+        }
+
+        const winners = [];
+        for (const type in counts) {
+          if (counts[type] === maxCount) winners.push(type);
+        }
+        return winners;
+      }
+
+      function init() {
+        const app = document.getElementById('app');
+        app.innerHTML = `
+          <div style="text-align:center;">
+            <div class="badge">2027 台灣大學校園徵才</div>
+            <h1 class="title">橘勢待發，職場勝局</h1>
+            <p style="color:#aaa; font-size:14px; line-height:1.6; margin-bottom:16px;">全場 10 秒快問快答！透過 5 道職涯情境問答，探索你在橘子集團的獨特天賦！</p>
+            <div class="card" style="font-size:12px; color:#ccc;">
+              <b style="color:#fff;">💡 說明：</b>全場同學將同步進行 5 道題目測試，每題作答時間 <b>10 秒</b>。按下按鈕即可加入目前進行中的測試！
+            </div>
+            <button id="join-btn" class="primary-btn">加入現場同步測驗 →</button>
+          </div>`;
+
+        document.getElementById('join-btn').onclick = () => {
+          gameStarted = true;
+          updateCycle();
+          setInterval(updateCycle, 1000);
+        };
+      }
+
+      window.addEventListener('DOMContentLoaded', init);
+    </script>
+  </body>
+</html>
