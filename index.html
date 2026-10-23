@@ -11,13 +11,22 @@
       header { width: 100%; max-width: 500px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; padding: 16px 0; border-bottom: 1px solid #333333; }
       .brand { display: flex; align-items: center; }
       
-      /* 🍊 終極去白底修正：改用 multiply 混合模式，完美把 JPG 的純白背景消除 */
-      .brand img { 
-        height: 36px; 
-        width: auto; 
-        object-fit: contain; 
-        mix-blend-mode: multiply;
-        filter: contrast(1.25) brightness(1.1);
+      /* 🍊 完美的圓形白底膠囊容器：徹底消除方框，保持 LOGO 鮮豔不變色 */
+      .brand-logo-box {
+        width: 36px;
+        height: 36px;
+        border-radius: 50%;
+        background-color: #ffffff;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        overflow: hidden;
+        box-shadow: 0 0 8px rgba(255,102,0,0.3);
+      }
+      .brand-logo-box img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
       }
       
       .brand-text { display: flex; align-items: center; gap: 10px; font-weight: 800; font-size: 18px; letter-spacing: 1px; }
@@ -39,7 +48,9 @@
   <body>
     <header>
       <div class="brand">
-        <img src="./logo.jpg" alt="GAMANIA 2027" onerror="this.style.display='none'; document.getElementById('brand-fallback').style.display='flex';" />
+        <div class="brand-logo-box">
+          <img src="./logo.jpg" alt="GAMANIA 2027" onerror="this.parentNode.style.display='none'; document.getElementById('brand-fallback').style.display='flex';" />
+        </div>
         <div id="brand-fallback" class="brand-text" style="display:none;">
           <div class="dot"></div>GAMANIA 2027
         </div>
