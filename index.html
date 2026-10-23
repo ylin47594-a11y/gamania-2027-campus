@@ -4,24 +4,24 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
-    <title>橘勢待發，職場勝局｜2027 台灣大學校園徵才</title>
+    <title>橘勢待發，職場勝局｜2027 台大校招</title>
     <style>
       * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
-      body { background-color: #121212; color: #ffffff; min-height: 100vh; display: flex; flex-direction: column; justify-content: space-between; padding: 16px; }
-      header { width: 100%; max-width: 440px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; padding: 12px 0; border-bottom: 1px solid #333333; }
-      .brand { display: flex; align-items: center; gap: 8px; font-weight: 800; font-size: 14px; letter-spacing: 1px; }
-      .dot { width: 12px; height: 12px; border-radius: 50%; background-color: #FF6600; }
-      .sync-tag { font-size: 11px; padding: 4px 8px; border-radius: 12px; background: rgba(255,102,0,0.15); border: 1px solid #FF6600; color: #FF6600; font-weight: bold; }
-      main { width: 100%; max-width: 440px; margin: auto; padding: 20px 0; flex: 1; }
-      footer { width: 100%; max-width: 440px; margin: 0 auto; text-align: center; font-size: 11px; color: #666; padding: 12px 0; border-top: 1px solid #333333; }
-      .card { background: #1A1A1A; border: 1px solid #333; border-radius: 16px; padding: 20px; text-align: left; margin-bottom: 16px; }
-      .title { color: #FF6600; font-size: 24px; font-weight: 800; text-align: center; margin: 12px 0; }
-      .badge { display: inline-block; background: rgba(255,102,0,0.15); border: 1px solid #FF6600; color: #FF6600; padding: 4px 12px; border-radius: 20px; font-size: 12px; margin-bottom: 8px; text-align: center; }
-      .primary-btn { width: 100%; background: #FF6600; color: #000; font-weight: 800; font-size: 16px; padding: 14px; border-radius: 12px; border: none; cursor: pointer; margin-top: 12px; }
+      body { background-color: #121212; color: #ffffff; min-height: 100vh; display: flex; flex-direction: column; justify-content: space-between; padding: 20px; }
+      header { width: 100%; max-width: 500px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; padding: 16px 0; border-bottom: 1px solid #333333; }
+      .brand { display: flex; align-items: center; gap: 10px; font-weight: 800; font-size: 18px; letter-spacing: 1px; }
+      .dot { width: 14px; height: 14px; border-radius: 50%; background-color: #FF6600; }
+      .sync-tag { font-size: 14px; padding: 6px 14px; border-radius: 16px; background: rgba(255,102,0,0.15); border: 1px solid #FF6600; color: #FF6600; font-weight: bold; }
+      main { width: 100%; max-width: 500px; margin: auto; padding: 24px 0; flex: 1; }
+      footer { width: 100%; max-width: 500px; margin: 0 auto; text-align: center; font-size: 14px; color: #888; padding: 16px 0; border-top: 1px solid #333333; }
+      .card { background: #1A1A1A; border: 1px solid #333; border-radius: 18px; padding: 24px; text-align: left; margin-bottom: 20px; }
+      .title { color: #FF6600; font-size: 32px; font-weight: 900; text-align: center; margin: 16px 0; letter-spacing: 1px; }
+      .badge { display: inline-block; background: rgba(255,102,0,0.15); border: 1px solid #FF6600; color: #FF6600; padding: 8px 18px; border-radius: 20px; font-size: 16px; margin-bottom: 12px; font-weight: bold; text-align: center; }
+      .primary-btn { width: 100%; background: #FF6600; color: #000; font-weight: 900; font-size: 20px; padding: 18px; border-radius: 14px; border: none; cursor: pointer; margin-top: 18px; }
       .primary-btn:hover { background: #ff771a; }
-      .opt-btn { width: 100%; background: #1A1A1A; border: 1px solid #333; color: #ddd; padding: 14px; border-radius: 12px; text-align: left; margin-bottom: 10px; cursor: pointer; font-size: 14px; display: flex; gap: 10px; transition: 0.2s; }
+      .opt-btn { width: 100%; background: #1A1A1A; border: 1.5px solid #333; color: #eee; padding: 18px 20px; border-radius: 14px; text-align: left; margin-bottom: 14px; cursor: pointer; font-size: 18px; line-height: 1.5; display: flex; gap: 14px; align-items: center; transition: 0.2s; }
       .opt-btn.selected { border-color: #FF6600; background: rgba(255,102,0,0.25); color: #fff; font-weight: bold; }
-      .progress-bar { width: 100%; height: 6px; background: #333; border-radius: 3px; overflow: hidden; margin-bottom: 16px; }
+      .progress-bar { width: 100%; height: 10px; background: #333; border-radius: 5px; overflow: hidden; margin-bottom: 22px; }
       .progress-fill { height: 100%; background: #FF6600; transition: width 0.2s linear; }
     </style>
   </head>
@@ -109,10 +109,26 @@
       ];
 
       const ROLES = {
-        INNOVATOR: { title: "創意發想型", subtitle: "The Creative Trailblazer", desc: "你擁有強大的想像力與突破框架的勇氣！在橘子集團，你總是能為產品注入驚喜與新鮮感。" },
-        ANALYST: { title: "邏輯解題型", subtitle: "The Master Mind", desc: "你具備卓越的條理性與數據敏感度！在橘子集團，你能精準找到關鍵解法。" },
-        CONNECTOR: { title: "連結推進型", subtitle: "The Project Catalyst", desc: "你是團隊中不可或缺的黏著劑與推手！在橘子集團，你能將多元資源轉化為執行力。" },
-        EXPLORER: { title: "洞察探索型", subtitle: "The Strategic Visionary", desc: "你對周遭變化有著敏銳的感知力！在橘子集團，你協助團隊在市場中取得先機。" }
+        INNOVATOR: {
+          title: "創意發想型 💡",
+          desc: "你擁有強大的想像力與打破框架的勇氣！不論是遊戲玩法、品牌活動還是產品體驗，你總能為橘子集團注入源源不絕的驚喜與新鮮感。"
+        },
+        ANALYST: {
+          title: "邏輯解題型 🔍",
+          desc: "你具備卓越的條理性與嚴密的數據敏感度！面對高難度技術挑戰或複雜業務痛點，你能迅速梳理邏輯、找到關鍵解法，是團隊最堅實的智囊。"
+        },
+        CONNECTOR: {
+          title: "連結推進型 🤝",
+          desc: "你是團隊中不可或缺的黏著劑與最強推手！具備高敏銳度的溝通共情力，能完美整合跨團隊資源，引領大家突破重圍、順利達成共同目標。"
+        },
+        EXPLORER: {
+          title: "洞察探索型 🔭",
+          desc: "你對周遭環境與市場變化有著雷達般敏銳的感知力！總能察覺別人忽視的細節，發掘全新的使用者需求，帶領橘子集團在產業中搶先取得勝局。"
+        },
+        NONE: {
+          title: "沉思解構型 🧘‍♂️",
+          desc: "你在面對職場選擇時，習慣保持冷靜觀察、不輕易下定義！在橘子集團，這種『不隨波逐流，善於觀望全貌與保持專注』的特質，正是許多跨領域創新專案中最需要的沉著力量。"
+        }
       };
 
       let qIndex = 0;
@@ -137,11 +153,11 @@
 
         app.innerHTML = `
           <div style="text-align:center;">
-            <div class="badge">2027 台灣大學校園徵才</div>
+            <div class="badge">2027 台大校招</div>
             <h1 class="title">橘勢待發，職場勝局</h1>
-            <p style="color:#aaa; font-size:14px; line-height:1.6; margin-bottom:16px;">透過 5 道職涯情境問答，探索你在橘子集團的獨特天賦！</p>
-            <div class="card" style="font-size:12px; color:#ccc;">
-              <b style="color:#fff;">💡 說明：</b>點擊開始後將直接進入第 1 題！每題<b>作答時間 10 秒</b>，時間到自動進入下一題。
+            <p style="color:#bbb; font-size:18px; line-height:1.6; margin-bottom:20px;">透過 5 道職涯情境問答，探索你在橘子集團的獨特天賦！</p>
+            <div class="card" style="font-size:16px; color:#ddd; line-height:1.6;">
+              <b style="color:#FF6600;">💡 測驗說明：</b><br>點擊開始後將直接進入第 1 題！每題<b>作答時間 10 秒</b>，倒數結束後自動切換至下一題。
             </div>
             <button id="start-btn" class="primary-btn">開始職涯探索 →</button>
           </div>`;
@@ -152,7 +168,6 @@
       function runQuiz() {
         stopTimer();
 
-        // 5 題已全數完成 ➔ 進入結果頁
         if (qIndex >= 5) {
           showResultPage();
           return;
@@ -164,21 +179,20 @@
 
         app.innerHTML = `
           <div>
-            <div style="display:flex; justify-content:space-between; font-size:12px; color:#aaa; margin-bottom:8px;">
+            <div style="display:flex; justify-content:space-between; font-size:16px; color:#aaa; margin-bottom:12px;">
               <span>QUESTION ${qIndex + 1} / 5</span>
-              <span id="timer-txt" style="color:#FF6600; font-weight:bold;">⏳ 倒數 ${secLeft} 秒</span>
+              <span id="timer-txt" style="color:#FF6600; font-weight:bold; font-size:18px;">⏳ 倒數 ${secLeft} 秒</span>
             </div>
             <div class="progress-bar"><div id="progress-fill" class="progress-fill" style="width:100%;"></div></div>
-            <h2 style="font-size:16px; margin-bottom:16px; font-weight:bold;">${currentQ.title}</h2>
+            <h2 style="font-size:22px; margin-bottom:24px; font-weight:800; line-height:1.4;">${currentQ.title}</h2>
             ${currentQ.options.map((opt, i) => `
               <button class="opt-btn ${userAnswers[qIndex] === i ? 'selected' : ''}" onclick="pickOption(${i})">
-                <span style="border:1px solid currentColor; padding:0 6px; border-radius:4px; font-weight:bold;">${String.fromCharCode(65+i)}</span>
+                <span style="border:1.5px solid currentColor; padding:3px 10px; border-radius:6px; font-weight:bold; font-size:16px;">${String.fromCharCode(65+i)}</span>
                 <span>${opt.text}</span>
               </button>`).join('')}
-            <p style="color:#666; font-size:11px; text-align:center; margin-top:10px;">💡 請點擊選項鎖定答案，10 秒結束後自動跳下一題</p>
+            <p style="color:#888; font-size:14px; text-align:center; margin-top:16px;">💡 請點擊選項鎖定答案，10 秒結束後自動跳下一題</p>
           </div>`;
 
-        // 開啟當前題目的倒數
         timerId = setInterval(() => {
           secLeft--;
           const txt = document.getElementById('timer-txt');
@@ -186,12 +200,8 @@
           if (txt) txt.innerText = `⏳ 倒數 ${secLeft} 秒`;
           if (bar) bar.style.width = `${(secLeft / 10) * 100}%`;
 
-          // 倒數完畢 ➔ 進下一題
           if (secLeft <= 0) {
             stopTimer();
-            if (userAnswers[qIndex] === null) {
-              userAnswers[qIndex] = 0; // 沒選預設補選 A
-            }
             qIndex++;
             runQuiz();
           }
@@ -211,29 +221,47 @@
       }
 
       function showResultPage() {
-        stopTimer(); // 徹底斷開倒數計時器
+        stopTimer();
 
-        const winningTypes = calculateScores();
+        const answeredCount = userAnswers.filter(a => a !== null).length;
+        const resultData = calculateScores();
+        const winningTypes = resultData.winners;
+
         let roleHTML = '';
         let jobList = [];
 
-        if (winningTypes.length > 1) {
+        // 情境 1：全無填答（0 題）
+        if (answeredCount === 0) {
+          const role = ROLES.NONE;
+          roleHTML = `
+            <div class="badge" style="background:rgba(255,255,255,0.1); border-color:#aaa; color:#aaa; font-size:14px;">專屬特別探索解析</div>
+            <h2 style="font-size:30px; color:#FF6600; margin:8px 0 16px 0; font-weight:900;">${role.title}</h2>
+            <p style="color:#ddd; font-size:16px; text-align:left; line-height:1.6;">${role.desc}</p>
+          `;
+          jobList = [...VACANCIES.EXPLORER, ...VACANCIES.INNOVATOR];
+        } 
+        // 情境 2：雙重天賦（平票）
+        else if (winningTypes.length > 1) {
           const r1 = ROLES[winningTypes[0]];
           const r2 = ROLES[winningTypes[1]];
+          const badgeNotice = answeredCount < 5 ? `<div style="font-size:13px; color:#aaa; margin-bottom:8px;">💡 基於你已完成的 ${answeredCount} 道題進行分析</div>` : '';
           roleHTML = `
-            <div class="badge" style="background:rgba(255,215,0,0.15); border-color:#FFD700; color:#FFD700;">🌟 雙重天賦 / 跨界型人才</div>
-            <h2 style="font-size:20px; color:#fff; margin:8px 0;">${r1.title} × ${r2.title}</h2>
-            <p style="color:#aaa; font-size:12px; margin-bottom:12px;">${r1.subtitle} & ${r2.subtitle}</p>
-            <p style="color:#ddd; font-size:13px; text-align:left; line-height:1.5;">你在多個面向展現出均勻且強大的潛力！同時具備 ${r1.title} 與 ${r2.title} 的特色，在橘子集團是極具彈性與跨界整合能力的關鍵角色。</p>
+            ${badgeNotice}
+            <div class="badge" style="background:rgba(255,215,0,0.15); border-color:#FFD700; color:#FFD700; font-size:16px;">🌟 雙重天賦 / 跨界型人才</div>
+            <h2 style="font-size:28px; color:#fff; margin:12px 0;">${r1.title} × ${r2.title}</h2>
+            <p style="color:#ddd; font-size:16px; text-align:left; line-height:1.6; margin-top:12px;">你在回答的題目中展現出均勻且強大的潛力！同時具備<b>【${r1.title}】</b>與<b>【${r2.title}】</b>的優勢，在橘子集團是極具彈性、能靈活應對各種突破性專案的跨界關鍵人才。</p>
           `;
           jobList = [...(VACANCIES[winningTypes[0]] || []), ...(VACANCIES[winningTypes[1]] || [])];
-        } else {
+        } 
+        // 情境 3：明確單一角色（回答 1~5 題）
+        else {
           const role = ROLES[winningTypes[0]];
+          const badgeNotice = answeredCount < 5 ? `<div style="font-size:13px; color:#aaa; margin-bottom:8px;">💡 基於你已完成的 ${answeredCount} 道題進行分析</div>` : '';
           roleHTML = `
-            <div style="color:#FF6600; font-size:12px; font-weight:bold;">YOUR CAREER ARCHETYPE</div>
-            <h2 style="font-size:22px; color:#fff; margin:8px 0;">${role.title}</h2>
-            <p style="color:#aaa; font-size:12px; margin-bottom:12px;">${role.subtitle}</p>
-            <p style="color:#ddd; font-size:13px; text-align:left; line-height:1.5;">${role.desc}</p>
+            ${badgeNotice}
+            <div class="badge" style="font-size:15px;">你的專屬職場屬性</div>
+            <h2 style="font-size:30px; color:#FF6600; margin:8px 0 16px 0; font-weight:900;">${role.title}</h2>
+            <p style="color:#ddd; font-size:16px; text-align:left; line-height:1.6;">${role.desc}</p>
           `;
           jobList = VACANCIES[winningTypes[0]] || [];
         }
@@ -244,16 +272,16 @@
               ${roleHTML}
             </div>
             <div class="card">
-              <div style="color:#fff; font-size:13px; font-weight:bold; margin-bottom:8px;">🚀 推薦延伸職缺領域</div>
+              <div style="color:#fff; font-size:18px; font-weight:bold; margin-bottom:14px;">🚀 橘子集團推薦延伸職缺領域</div>
               ${jobList.map(v => `
-                <div style="display:flex; justify-content:space-between; background:#121212; padding:8px 12px; border-radius:8px; font-size:12px; margin-bottom:6px;">
+                <div style="display:flex; justify-content:space-between; align-items:center; background:#121212; padding:14px 18px; border-radius:12px; font-size:16px; margin-bottom:10px; border:1px solid #2a2a2a;">
                   <span>${v.name}</span>
-                  <a href="${v.url}" target="_blank" style="color:#FF6600; font-weight:bold; text-decoration:none;">查看 ↗</a>
+                  <a href="${v.url}" target="_blank" style="color:#FF6600; font-weight:bold; text-decoration:none; font-size:16px;">查看 ↗</a>
                 </div>`).join('')}
             </div>
             <div class="card" style="background:rgba(255,102,0,0.15); border-color:#FF6600; text-align:center;">
-              <div style="color:#FF6600; font-weight:bold; font-size:14px;">感謝參與橘子集團 2027 校園徵才！</div>
-              <p style="color:#fff; font-size:12px; margin-top:6px; font-weight:bold;">🎟️ 憑此結果頁面，即可向現場工作人員兌換專屬精美好禮！</p>
+              <div style="color:#FF6600; font-weight:bold; font-size:18px; margin-bottom:8px;">感謝參與橘子集團 2027 校園徵才！</div>
+              <p style="color:#fff; font-size:15px; font-weight:bold; line-height:1.5;">🎟️ 憑此結果頁面或活動憑票，即可向現場工作人員兌換專屬精美好禮！</p>
             </div>
           </div>`;
       }
@@ -273,10 +301,12 @@
         }
 
         const winners = [];
-        for (const k in tally) {
-          if (tally[k] === highest) winners.push(k);
+        if (highest > 0) {
+          for (const k in tally) {
+            if (tally[k] === highest) winners.push(k);
+          }
         }
-        return winners;
+        return { winners, tally };
       }
 
       window.addEventListener('DOMContentLoaded', initApp);
