@@ -11,12 +11,12 @@
       header { width: 100%; max-width: 500px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; padding: 16px 0; border-bottom: 1px solid #333333; }
       .brand { display: flex; align-items: center; }
       
-      /* 🍊 絕對不跑版：精準圓形裁切，把四周的灰白棋盤格乾淨切除 */
+      /* 🍊 還原完整 LOGO：去掉多餘裁切，完整呈現原始橘子標誌 */
       .brand img { 
-        height: 36px; 
-        width: 36px; 
-        object-fit: cover; 
-        clip-path: circle(46% at 50% 50%); /* 精確剔除邊緣灰白格，僅保留圓形 */
+        height: 38px; 
+        width: auto; 
+        object-fit: contain; 
+        clip-path: circle(50% at 50% 50%);
         display: block;
       }
       
