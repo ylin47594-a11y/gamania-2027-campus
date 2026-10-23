@@ -11,7 +11,7 @@
       header { width: 100%; max-width: 500px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; padding: 20px 0; border-bottom: 1px solid #333333; }
       .brand { display: flex; align-items: center; }
       
-      /* 🍊 大幅提升 LOGO 尺寸至 80px，讓存在感超強烈 */
+      /* 🍊 巨幅放大 LOGO 至 80px */
       .brand img { 
         height: 80px !important; 
         max-height: 80px !important;
@@ -39,7 +39,8 @@
   <body>
     <header>
       <div class="brand">
-        <img src="./logo.png" alt="GAMANIA 2027" onerror="this.onerror=null; this.src='./logo.jpg'; this.onerror=function(){ this.style.display='none'; document.getElementById('brand-fallback').style.display='flex'; }" />
+        <!-- ⚡ 加上 ?v=80 強制避開瀏覽器快取 -->
+        <img src="./logo.png?v=80" alt="GAMANIA 2027" onerror="this.onerror=null; this.src='./logo.jpg?v=80'; this.onerror=function(){ this.style.display='none'; document.getElementById('brand-fallback').style.display='flex'; }" />
         <div id="brand-fallback" class="brand-text" style="display:none;">
           <div class="dot"></div>GAMANIA 2027
         </div>
