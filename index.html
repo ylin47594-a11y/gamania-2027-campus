@@ -8,20 +8,21 @@
     <style>
       * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
       body { background-color: #121212; color: #ffffff; min-height: 100vh; display: flex; flex-direction: column; justify-content: space-between; padding: 20px; }
-      header { width: 100%; max-width: 500px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; padding: 16px 0; border-bottom: 1px solid #333333; }
+      header { width: 100%; max-width: 500px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; padding: 20px 0; border-bottom: 1px solid #333333; }
       .brand { display: flex; align-items: center; }
       
-      /* 🍊 放大 LOGO 尺寸（從原本的 38px 提升至 52px） */
+      /* 🍊 大幅提升 LOGO 尺寸至 80px，讓存在感超強烈 */
       .brand img { 
-        height: 52px; 
+        height: 80px !important; 
+        max-height: 80px !important;
         width: auto; 
         object-fit: contain; 
         display: block;
       }
       
-      .brand-text { display: flex; align-items: center; gap: 10px; font-weight: 800; font-size: 20px; letter-spacing: 1px; }
-      .dot { width: 16px; height: 16px; border-radius: 50%; background-color: #FF6600; }
-      .sync-tag { font-size: 14px; padding: 6px 14px; border-radius: 16px; background: rgba(255,102,0,0.15); border: 1px solid #FF6600; color: #FF6600; font-weight: bold; }
+      .brand-text { display: flex; align-items: center; gap: 10px; font-weight: 800; font-size: 22px; letter-spacing: 1px; }
+      .dot { width: 18px; height: 18px; border-radius: 50%; background-color: #FF6600; }
+      .sync-tag { font-size: 15px; padding: 8px 16px; border-radius: 20px; background: rgba(255,102,0,0.15); border: 1px solid #FF6600; color: #FF6600; font-weight: bold; }
       main { width: 100%; max-width: 500px; margin: auto; padding: 24px 0; flex: 1; }
       footer { width: 100%; max-width: 500px; margin: 0 auto; text-align: center; font-size: 14px; color: #888; padding: 16px 0; border-top: 1px solid #333333; }
       .card { background: #1A1A1A; border: 1px solid #333; border-radius: 18px; padding: 24px; text-align: left; margin-bottom: 20px; }
@@ -38,7 +39,6 @@
   <body>
     <header>
       <div class="brand">
-        <!-- 嘗試讀取 logo.png，若不存在則嘗試 logo.jpg -->
         <img src="./logo.png" alt="GAMANIA 2027" onerror="this.onerror=null; this.src='./logo.jpg'; this.onerror=function(){ this.style.display='none'; document.getElementById('brand-fallback').style.display='flex'; }" />
         <div id="brand-fallback" class="brand-text" style="display:none;">
           <div class="dot"></div>GAMANIA 2027
