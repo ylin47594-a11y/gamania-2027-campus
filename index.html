@@ -11,13 +11,13 @@
       header { width: 100%; max-width: 500px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; padding: 16px 0; border-bottom: 1px solid #333333; }
       .brand { display: flex; align-items: center; }
       
-      /* 🍊 針對 logo.jpg 進行去背與大小優化 */
+      /* 🍊 終極去白底修正：改用 multiply 混合模式，完美把 JPG 的純白背景消除 */
       .brand img { 
-        height: 32px; 
+        height: 36px; 
         width: auto; 
         object-fit: contain; 
-        mix-blend-mode: screen; 
-        filter: contrast(1.1) brightness(1.1);
+        mix-blend-mode: multiply;
+        filter: contrast(1.25) brightness(1.1);
       }
       
       .brand-text { display: flex; align-items: center; gap: 10px; font-weight: 800; font-size: 18px; letter-spacing: 1px; }
@@ -39,7 +39,6 @@
   <body>
     <header>
       <div class="brand">
-        <!-- 精準抓取專案根目錄中的 logo.jpg，並具備破圖自動防錯切換機制 -->
         <img src="./logo.jpg" alt="GAMANIA 2027" onerror="this.style.display='none'; document.getElementById('brand-fallback').style.display='flex';" />
         <div id="brand-fallback" class="brand-text" style="display:none;">
           <div class="dot"></div>GAMANIA 2027
