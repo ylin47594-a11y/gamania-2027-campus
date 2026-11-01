@@ -8,19 +8,22 @@
     <style>
       * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
       body { background-color: #121212; color: #ffffff; min-height: 100vh; display: flex; flex-direction: column; justify-content: space-between; padding: 20px; }
-      header { width: 100%; max-width: 500px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; padding: 20px 0; border-bottom: 1px solid #333333; }
+      header { width: 100%; max-width: 500px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; padding: 16px 0; border-bottom: 1px solid #333333; }
       .brand { display: flex; align-items: center; }
       
-      /* 🍊 乾淨無白邊的大尺寸 LOGO (80px) */
+      /* 🍊 圓形遮罩 LOGO */
       .brand img { 
-        height: 80px !important; 
-        width: auto !important; 
-        object-fit: contain; 
+        height: 64px !important; 
+        width: 64px !important; 
+        object-fit: cover;
+        border-radius: 50%;
+        -webkit-mask-image: radial-gradient(circle, black 68%, transparent 70%);
+        mask-image: radial-gradient(circle, black 68%, transparent 70%);
         display: block;
       }
       
-      .brand-text { display: flex; align-items: center; gap: 10px; font-weight: 800; font-size: 22px; letter-spacing: 1px; }
-      .dot { width: 18px; height: 18px; border-radius: 50%; background-color: #FF6600; }
+      .brand-text { display: flex; align-items: center; gap: 10px; font-weight: 800; font-size: 20px; letter-spacing: 1px; }
+      .dot { width: 16px; height: 16px; border-radius: 50%; background-color: #FF6600; }
       .sync-tag { font-size: 15px; padding: 8px 16px; border-radius: 20px; background: rgba(255,102,0,0.15); border: 1px solid #FF6600; color: #FF6600; font-weight: bold; }
       main { width: 100%; max-width: 500px; margin: auto; padding: 24px 0; flex: 1; }
       footer { width: 100%; max-width: 500px; margin: 0 auto; text-align: center; font-size: 14px; color: #888; padding: 16px 0; border-top: 1px solid #333333; }
@@ -33,13 +36,13 @@
       .opt-btn.selected { border-color: #FF6600; background: rgba(255,102,0,0.25); color: #fff; font-weight: bold; }
       .progress-bar { width: 100%; height: 10px; background: #333; border-radius: 5px; overflow: hidden; margin-bottom: 22px; }
       .progress-fill { height: 100%; background: #FF6600; transition: width 0.2s linear; }
+      .stat-note { font-size: 14px; color: #FF6600; font-weight: bold; margin-bottom: 10px; }
     </style>
   </head>
   <body>
     <header>
       <div class="brand">
-        <!-- 準確指向上傳的去背檔 gamania-logo.png -->
-        <img src="./gamania-logo.png" alt="GAMANIA 2027" onerror="this.style.display='none'; document.getElementById('brand-fallback').style.display='flex';" />
+        <img src="./gamania-logo.png?v=999" alt="GAMANIA 2027" onerror="this.onerror=null; this.src='./logo.jpg?v=999'; this.onerror=function(){ this.style.display='none'; document.getElementById('brand-fallback').style.display='flex'; }" />
         <div id="brand-fallback" class="brand-text" style="display:none;">
           <div class="dot"></div>GAMANIA 2027
         </div>
@@ -243,6 +246,12 @@
         const resultData = calculateScores();
         const winningTypes = resultData.winners;
 
+        // 💡 動態依據作答題數顯示這一句
+        let answerNotice = '';
+        if (answeredCount > 0) {
+          answerNotice = `<div class="stat-note">🎯 依據你完成的 ${answeredCount} 道作答選擇分析</div>`;
+        }
+
         let roleHTML = '';
         let jobList = [];
 
@@ -258,20 +267,18 @@
         else if (winningTypes.length > 1) {
           const r1 = ROLES[winningTypes[0]];
           const r2 = ROLES[winningTypes[1]];
-          const badgeNotice = answeredCount < 5 ? `<div style="font-size:13px; color:#aaa; margin-bottom:8px;">💡 基於你已完成的 ${answeredCount} 道題進行分析</div>` : '';
           roleHTML = `
-            ${badgeNotice}
+            ${answerNotice}
             <div class="badge" style="background:rgba(255,215,0,0.15); border-color:#FFD700; color:#FFD700; font-size:16px;">🌟 雙重天賦 / 跨界型人才</div>
             <h2 style="font-size:28px; color:#fff; margin:12px 0;">${r1.title} × ${r2.title}</h2>
-            <p style="color:#ddd; font-size:16px; text-align:left; line-height:1.6; margin-top:12px;">你在回答的題目中展現出均勻且強大的潛力！同時具備<b>【${r1.title}】</b>與<b>【${r2.title}】</b>的優勢，在橘子集團是極具彈性、能靈活應對各種突破性專案的跨界關鍵人才。</p>
+            <p style="color:#ddd; font-size:16px; text-align:left; line-height:1.6;">你在回答的題目中展現出均勻且強大的潛力！同時具備<b>【${r1.title}】</b>與<b>【${r2.title}】</b>的優勢，在橘子集團是極具彈性、能靈活應對各種突破性專案的跨界關鍵人才。</p>
           `;
           jobList = [...(VACANCIES[winningTypes[0]] || []), ...(VACANCIES[winningTypes[1]] || [])];
         } 
         else {
           const role = ROLES[winningTypes[0]];
-          const badgeNotice = answeredCount < 5 ? `<div style="font-size:13px; color:#aaa; margin-bottom:8px;">💡 基於你已完成的 ${answeredCount} 道題進行分析</div>` : '';
           roleHTML = `
-            ${badgeNotice}
+            ${answerNotice}
             <div class="badge" style="font-size:15px;">你的專屬職場屬性</div>
             <h2 style="font-size:30px; color:#FF6600; margin:8px 0 16px 0; font-weight:900;">${role.title}</h2>
             <p style="color:#ddd; font-size:16px; text-align:left; line-height:1.6;">${role.desc}</p>
